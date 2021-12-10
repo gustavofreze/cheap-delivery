@@ -1,0 +1,41 @@
+{
+  "name": "gustavofreze/cheap-delivery",
+  "description": "",
+  "type": "project",
+  "license": "MIT",
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "config": {
+    "sort-packages": true
+  },
+  "autoload": {
+    "psr-4": {
+      "CheapDelivery\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "CheapDelivery\\": "tests/"
+    }
+  },
+  "require": {
+    "php": "^8.0",
+    "php-di/slim-bridge": "^3.1",
+    "slim/psr7": "^1.5",
+    "slim/slim": "^4.9",
+    "respect/validation": "^2.2",
+    "mongodb/mongodb": "^1.10.0",
+    "ext-mongodb": "*",
+    "ext-pdo": "*"
+  },
+  "require-dev": {
+    "phpmd/phpmd": "^2.11",
+    "phpunit/phpunit": "^9.5",
+    "dg/bypass-finals": "^1.1"
+  },
+  "scripts": {
+    "test": "phpunit --colors",
+    "test-coverage": "phpunit --log-junit=report/coverage/junit.xml --coverage-xml=report/coverage/coverage-xml --coverage-html ./report/coverage-html",
+    "phpmd": "phpmd ./src text phpmd.xml"
+  }
+}

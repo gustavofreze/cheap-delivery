@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  cheap-delivery:
+    container_name: cheap-delivery
+    image: gustavofreze/cheap-delivery
+    restart: always
+    env_file:
+      - ./config/configs.env
+    volumes:
+      - ./src:/var/www/html/src
+      - ./public:/var/www/html/public
+      - ./composer.json:/var/www/html/composer.json
+
+  mongodb:
+    image: mongo:5.0
+    container_name: mongodb
+    hostname: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: cheap_delivery
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./db/mongodb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+
+  nginx:
+    container_name: nginx
+    image: nginx:1.21.4
+    restart: always
+    depends_on:
+      - cheap-delivery
+    volumes:
+      - ./public:/var/www/html
+      - ./config/nginx/nginx.conf:/etc/nginx/conf.d/site.conf
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.nginx.rule=Host(`cheap-delivery.localhost`)"
+      - "traefik.http.routers.nginx.entrypoints=http"
+
+  reverse-proxy:
+    container_name: reverse-proxy
+    image: traefik:v2.4
+    restart: always
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.http.address=:81"
+    ports:
+      - "81:81"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
