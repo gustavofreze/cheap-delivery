@@ -10,17 +10,14 @@ use CheapDelivery\Driven\Database\DatabaseSettings;
 use CheapDelivery\Driven\Database\Mongo\MongoSettings;
 use CheapDelivery\Driven\Database\NoSqlDatabase;
 use CheapDelivery\Driven\Database\NoSqlDatabaseEngine;
-use DI\ContainerBuilder;
+use CheapDelivery\Driven\Environment\Environment;
+use CheapDelivery\Driven\Environment\EnvironmentAdapter;
 
 use function DI\autowire;
 
-$containerBuilder = new ContainerBuilder();
-
-$containerBuilder->addDefinitions([
+return [
     Carriers::class => autowire(CarrierRepository::class),
+    Environment::class => autowire(EnvironmentAdapter::class),
     NoSqlDatabase::class => autowire(NoSqlDatabaseEngine::class),
     DatabaseSettings::class => autowire(MongoSettings::class)
-]);
-
-/** @noinspection PhpUnusedLocalVariableInspection */
-$container = $containerBuilder->build();
+];

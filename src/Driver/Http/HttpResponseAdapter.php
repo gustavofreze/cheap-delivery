@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace CheapDelivery\Driver\Http;
 
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Throwable;
 
-trait ActionCapabilities
+trait HttpResponseAdapter
 {
     private mixed $payload = null;
 
@@ -15,7 +16,7 @@ trait ActionCapabilities
 
     private string $contentType = 'application/json';
 
-    public function reply(Response $response): Response
+    public function reply(ResponseInterface $response): ResponseInterface
     {
         if (!is_null($this->payload)) {
             $response->getBody()->write(json_encode($this->payload));
@@ -26,30 +27,37 @@ trait ActionCapabilities
             ->withHeader('Content-type', $this->contentType);
     }
 
-    public function withPayload(mixed $payload): Action
+    public function withPayload(mixed $payload): HttpResponse
     {
         $this->payload = $payload;
 
         return $this;
     }
 
-    public function withHttpCode(int $httpCode): Action
+    public function withHttpCode(int $httpCode): HttpResponse
     {
         $this->httpCode = $httpCode;
 
         return $this;
     }
 
-    public function withException(ActionException $exception): Action
+    public function withException(Throwable $exception): HttpResponse
     {
-        $httpCode = $exception->getCode();
-        $this->payload = ['error' => $exception->getErrors()];
-        $this->httpCode = empty($httpCode) ? HttpCode::INTERNAL_SERVER_ERROR : $exception->getCode();
+        $httpCode = empty($exception->getCode()) ? HttpCode::INTERNAL_SERVER_ERROR : $exception->getCode();
+        $this->httpCode = $httpCode;
+
+        if ($exception instanceof HttpException) {
+            $this->payload = ['error' => $exception->getErrors()];
+
+            return $this;
+        }
+
+        $this->payload = ['error' => $exception->getMessage()];
 
         return $this;
     }
 
-    public function bodyFromRequest(Request $request): array
+    public function bodyFromRequest(ServerRequestInterface $request): array
     {
         $contentType = $request->getHeaderLine('Content-Type');
 

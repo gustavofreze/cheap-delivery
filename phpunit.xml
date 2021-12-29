@@ -21,6 +21,11 @@
         <include>
             <directory suffix=".php">src/Core</directory>
             <directory suffix=".php">src/Driven/Carrier</directory>
+            <directory suffix=".php">src/Driven/Environment</directory>
         </include>
     </coverage>
+
+    <php>
+        <env name="XPTO" value="xxxxxxxxxx"/>
+    </php>
 </phpunit>

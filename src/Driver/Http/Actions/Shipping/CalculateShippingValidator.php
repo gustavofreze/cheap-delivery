@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CheapDelivery\Driver\Http\Shipping;
+namespace CheapDelivery\Driver\Http\Actions\Shipping;
 
 use CheapDelivery\Driver\Http\Exceptions\InvalidRequestPayload;
 use Respect\Validation\Exceptions\ValidationException;

@@ -10,6 +10,7 @@ final class UnknownModality extends LogicException
 {
     public function __construct(string $invalid)
     {
-        parent::__construct(message: sprintf('Unknown %s modality', $invalid));
+        $template = 'Unknown %s modality';
+        parent::__construct(message: sprintf($template, $invalid));
     }
 }

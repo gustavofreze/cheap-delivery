@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace CheapDelivery\Driver\Http\Shipping;
+namespace CheapDelivery\Driver\Http\Actions\Shipping;
 
 use CheapDelivery\Core\Models\Distance;
 use CheapDelivery\Core\Models\Name;
@@ -11,24 +11,23 @@ use CheapDelivery\Core\Models\Product;
 use CheapDelivery\Core\Models\Shipments;
 use CheapDelivery\Core\Models\Weight;
 use CheapDelivery\Core\Repository\Carriers;
-use CheapDelivery\Driver\Http\Action;
-use CheapDelivery\Driver\Http\ActionCapabilities;
-use CheapDelivery\Driver\Http\Exceptions\InvalidRequestPayload;
 use CheapDelivery\Driver\Http\Exceptions\NoEligibleCarriers;
 use CheapDelivery\Driver\Http\HttpCode;
-use Psr\Http\Message\ResponseInterface as Response;
-use Psr\Http\Message\ServerRequestInterface as Request;
+use CheapDelivery\Driver\Http\HttpResponse;
+use CheapDelivery\Driver\Http\HttpResponseAdapter;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use Throwable;
 
-final class CalculateShipping implements Action
+final class CalculateShipping implements HttpResponse
 {
-    use ActionCapabilities;
+    use HttpResponseAdapter;
 
     public function __construct(private Carriers $carriers, private CalculateShippingValidator $validator)
     {
     }
 
-    public function __invoke(Request $request, Response $response, array $args): Response
+    public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         try {
             $body = $this->bodyFromRequest($request);
@@ -56,14 +55,9 @@ final class CalculateShipping implements Action
                 ->withHttpCode(HttpCode::OK)
                 ->withPayload($shipment->toArray())
                 ->reply($response);
-        } catch (NoEligibleCarriers|InvalidRequestPayload $exception) {
-            return $this
-                ->withException($exception)
-                ->reply($response);
         } catch (Throwable $exception) {
             return $this
-                ->withHttpCode(HttpCode::INTERNAL_SERVER_ERROR)
-                ->withPayload($exception->getMessage())
+                ->withException($exception)
                 ->reply($response);
         }
     }

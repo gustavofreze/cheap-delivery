@@ -10,12 +10,14 @@ use CheapDelivery\Driven\Database\NoSqlDatabase;
 
 final class CarrierRepository implements Carriers
 {
+    private const CARRIER = 'carrier';
+
     public function __construct(private NoSqlDatabase $database)
     {
     }
 
     public function findAll(): array
     {
-        return CarriersFactory::build($this->database->find('carrier'));
+        return CarriersFactory::build($this->database->find(self::CARRIER));
     }
 }
