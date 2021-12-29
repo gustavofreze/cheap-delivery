@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace CheapDelivery\Driver\Http\Exceptions;
 
-use CheapDelivery\Driver\Http\ActionException;
 use CheapDelivery\Driver\Http\HttpCode;
+use CheapDelivery\Driver\Http\HttpException;
 use Exception;
 
-final class InvalidRequestPayload extends Exception implements ActionException
+final class InvalidRequestPayload extends Exception implements HttpException
 {
     public function __construct(private array $errors)
     {

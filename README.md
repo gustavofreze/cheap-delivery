@@ -63,7 +63,7 @@ URLs de acesso:
 
 ###### Realiza o cálculo do menor custo de envio disponível.
 
-**POST** `/shipment`
+**POST** `{{dns}}/shipment`
 
 **Request**
 

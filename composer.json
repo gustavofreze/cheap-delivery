@@ -20,18 +20,18 @@
   },
   "require": {
     "php": "^8.0",
-    "php-di/slim-bridge": "^3.1",
-    "slim/psr7": "^1.5",
-    "slim/slim": "^4.9",
-    "respect/validation": "^2.2",
-    "mongodb/mongodb": "^1.10.0",
+    "php-di/slim-bridge": "3.*",
+    "slim/psr7": "1.*",
+    "slim/slim": "4.*",
+    "respect/validation": "2.*",
+    "mongodb/mongodb": "1.*",
     "ext-mongodb": "*",
     "ext-pdo": "*"
   },
   "require-dev": {
-    "phpmd/phpmd": "^2.11",
-    "phpunit/phpunit": "^9.5",
-    "dg/bypass-finals": "^1.1"
+    "phpmd/phpmd": "2.*",
+    "phpunit/phpunit": "9.*",
+    "dg/bypass-finals": "1.*"
   },
   "scripts": {
     "test": "phpunit --colors",

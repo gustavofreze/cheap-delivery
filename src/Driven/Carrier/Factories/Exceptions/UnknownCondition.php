@@ -10,6 +10,7 @@ final class UnknownCondition extends LogicException
 {
     public function __construct(string $invalid)
     {
-        parent::__construct(message: sprintf('Unknown %s condition', $invalid));
+        $template = 'Unknown %s condition';
+        parent::__construct(message: sprintf($template, $invalid));
     }
 }
