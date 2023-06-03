@@ -10,6 +10,9 @@ use Respect\Validation\Validator;
 
 final class CalculateShippingValidator
 {
+    /**
+     * @throws InvalidRequestPayload
+     */
     public function validate(mixed $request): void
     {
         try {
@@ -22,7 +25,7 @@ final class CalculateShippingValidator
             )->assert($request);
         } catch (ValidationException $exception) {
             /** @noinspection PhpPossiblePolymorphicInvocationInspection */
-            throw new InvalidRequestPayload($exception->getMessages());
+            throw new InvalidRequestPayload(errors: $exception->getMessages());
         }
     }
 }

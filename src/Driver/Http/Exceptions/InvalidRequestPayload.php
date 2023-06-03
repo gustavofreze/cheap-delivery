@@ -10,7 +10,7 @@ use Exception;
 
 final class InvalidRequestPayload extends Exception implements HttpException
 {
-    public function __construct(private array $errors)
+    public function __construct(private readonly array $errors)
     {
         parent::__construct(code: HttpCode::BAD_REQUEST);
     }

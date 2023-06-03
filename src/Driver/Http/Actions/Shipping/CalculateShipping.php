@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace CheapDelivery\Driver\Http\Actions\Shipping;
 
-use CheapDelivery\Core\Models\Distance;
-use CheapDelivery\Core\Models\Name;
-use CheapDelivery\Core\Models\Person;
-use CheapDelivery\Core\Models\Product;
-use CheapDelivery\Core\Models\Shipments;
-use CheapDelivery\Core\Models\Weight;
-use CheapDelivery\Core\Repository\Carriers;
+use CheapDelivery\Domain\Models\Distance;
+use CheapDelivery\Domain\Models\Name;
+use CheapDelivery\Domain\Models\Person;
+use CheapDelivery\Domain\Models\Product;
+use CheapDelivery\Domain\Models\Shipments;
+use CheapDelivery\Domain\Models\Weight;
+use CheapDelivery\Domain\Ports\Outbound\Carriers;
 use CheapDelivery\Driver\Http\Exceptions\NoEligibleCarriers;
 use CheapDelivery\Driver\Http\HttpCode;
 use CheapDelivery\Driver\Http\HttpResponse;
@@ -23,28 +23,34 @@ final class CalculateShipping implements HttpResponse
 {
     use HttpResponseAdapter;
 
-    public function __construct(private Carriers $carriers, private CalculateShippingValidator $validator)
-    {
+    public function __construct(
+        private readonly Carriers $carriers,
+        private readonly CalculateShippingValidator $validator
+    ) {
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         try {
-            $body = $this->bodyFromRequest($request);
-            $this->validator->validate($body);
+            $body = $this->bodyFromRequest(request: $request);
+            $this->validator->validate(request: $body);
 
             $person = new Person(
-                name: new Name($body['person']['name']),
-                distance: new Distance($body['person']['distance'])
+                name: new Name(value: $body['person']['name']),
+                distance: new Distance(value: $body['person']['distance'])
             );
 
             $product = new Product(
-                name: new Name($body['product']['name']),
-                weight: new Weight($body['product']['weight'])
+                name: new Name(value: $body['product']['name']),
+                weight: new Weight(value: $body['product']['weight'])
             );
-
             $carriers = $this->carriers->findAll();
-            $shipments = Shipments::from($carriers, $product->getWeight(), $person->getDistance());
+
+            $shipments = Shipments::from(
+                carriers: $carriers,
+                weight: $product->getWeight(),
+                distance: $person->getDistance()
+            );
             $shipment = $shipments->lowestCost();
 
             if (is_null($shipment)) {
@@ -52,13 +58,13 @@ final class CalculateShipping implements HttpResponse
             }
 
             return $this
-                ->withHttpCode(HttpCode::OK)
-                ->withPayload($shipment->toArray())
-                ->reply($response);
+                ->withHttpCode(httpCode: HttpCode::OK)
+                ->withPayload(payload: $shipment->toArray())
+                ->reply(response: $response);
         } catch (Throwable $exception) {
             return $this
-                ->withException($exception)
-                ->reply($response);
+                ->withException(exception: $exception)
+                ->reply(response: $response);
         }
     }
 }

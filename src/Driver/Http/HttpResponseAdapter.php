@@ -23,8 +23,8 @@ trait HttpResponseAdapter
         }
 
         return $response
-            ->withStatus($this->httpCode)
-            ->withHeader('Content-type', $this->contentType);
+            ->withStatus(code: $this->httpCode)
+            ->withHeader(name: 'Content-type', value: $this->contentType);
     }
 
     public function withPayload(mixed $payload): HttpResponse
@@ -43,7 +43,12 @@ trait HttpResponseAdapter
 
     public function withException(Throwable $exception): HttpResponse
     {
-        $httpCode = empty($exception->getCode()) ? HttpCode::INTERNAL_SERVER_ERROR : $exception->getCode();
+        $httpCode = $exception->getCode();
+
+        if (empty($httpCode) || !in_array($httpCode, HttpCode::all())) {
+            $httpCode = HttpCode::INTERNAL_SERVER_ERROR;
+        }
+
         $this->httpCode = $httpCode;
 
         if ($exception instanceof HttpException) {

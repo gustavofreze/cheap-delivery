@@ -1,4 +1,4 @@
-FROM gustavofreze/php:8.0.6-fpm
+FROM gustavofreze/php:8.1.7-fpm
 
 RUN apk update  \
     && apk add libressl-dev \

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CheapDelivery;
 
-use CheapDelivery\Core\Repository\Carriers;
+use CheapDelivery\Domain\Ports\Outbound\Carriers;
 use CheapDelivery\Driven\Carrier\CarrierRepository;
 use CheapDelivery\Driven\Database\DatabaseSettings;
 use CheapDelivery\Driven\Database\Mongo\MongoSettings;

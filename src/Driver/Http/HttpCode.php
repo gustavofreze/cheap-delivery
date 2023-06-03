@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace CheapDelivery\Driver\Http;
 
+use ReflectionClass;
+
 final class HttpCode
 {
     # [Successful 2xx]
@@ -15,4 +17,9 @@ final class HttpCode
 
     # [Server Error 5xx]
     public const INTERNAL_SERVER_ERROR = 500;
+
+    public static function all(): array
+    {
+        return (new ReflectionClass(self::class))->getConstants();
+    }
 }

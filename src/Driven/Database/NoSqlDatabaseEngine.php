@@ -8,12 +8,14 @@ use CheapDelivery\Driven\Database\Mongo\MongoAdapter;
 
 final class NoSqlDatabaseEngine implements NoSqlDatabase
 {
-    public function __construct(private MongoAdapter $adapter)
+    public function __construct(private readonly MongoAdapter $adapter)
     {
     }
 
     public function find(string $collectionName, array $filter = [], array $options = []): array
     {
-        return $this->adapter->collection($collectionName)->find($filter, $options);
+        return $this->adapter
+            ->collection(collectionName: $collectionName)
+            ->find(filter: $filter, options: $options);
     }
 }
