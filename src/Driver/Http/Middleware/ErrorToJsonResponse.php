@@ -20,11 +20,11 @@ final class ErrorToJsonResponse implements MiddlewareInterface, HttpResponse
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         try {
-            return $handler->handle($request);
+            return $handler->handle(request: $request);
         } catch (Throwable $exception) {
             return $this
-                ->withException($exception)
-                ->reply(new Response());
+                ->withException(exception: $exception)
+                ->reply(response: new Response());
         }
     }
 }
