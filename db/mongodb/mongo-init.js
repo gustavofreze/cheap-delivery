@@ -8,7 +8,7 @@ db = db.getSiblingDB('cheap_delivery');
 
 db.createUser({
     user: 'cheap_delivery_app',
-    pwd: 'd$78*PwoRYp9',
+    pwd: 'cheap',
     roles: [{
         role: 'readWrite',
         db: 'cheap_delivery'

@@ -17,17 +17,17 @@ final class MongoSettings implements DatabaseSettings
 
     private string $databaseName;
 
-    public function __construct(private Environment $environment)
+    public function __construct(private readonly Environment $environment)
     {
-        $this->user = $this->environment->get('MONGO_DATABASE_USER');
-        $this->password = $this->environment->get('MONGO_DATABASE_PASSWORD');
-        $this->databaseName = $this->environment->get('MONGO_DATABASE_NAME');
+        $this->user = $this->environment->get(variable: 'MONGO_DATABASE_USER');
+        $this->password = $this->environment->get(variable: 'MONGO_DATABASE_PASSWORD');
+        $this->databaseName = $this->environment->get(variable: 'MONGO_DATABASE_NAME');
         $this->uri = sprintf(
             'mongodb://%s:%s@%s:%d/%s',
             $this->user,
             $this->password,
-            $this->environment->get('MONGO_DATABASE_HOST'),
-            $this->environment->get('MONGO_DATABASE_PORT'),
+            $this->environment->get(variable: 'MONGO_DATABASE_HOST'),
+            $this->environment->get(variable: 'MONGO_DATABASE_PORT'),
             $this->databaseName
         );
     }

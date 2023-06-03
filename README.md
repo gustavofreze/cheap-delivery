@@ -1,6 +1,6 @@
 # Cheap Delivery
 
-[![Minimum PHP Version](https://img.shields.io/badge/php-8.0.6-blue)](https://www.php.net)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 * [Overview](#overview)
 * [Instalação](#installation)
@@ -36,7 +36,7 @@ recebemos as seguintes condições para o transporte:
 Para clonar o repositório usando a linha de comando, execute:
 
 ```bash
-> git clone https://github.com/gustavofreze/cheap-delivery.git
+git clone https://github.com/gustavofreze/cheap-delivery.git
 ```
 
 <div id='settings'></div> 
@@ -44,7 +44,7 @@ Para clonar o repositório usando a linha de comando, execute:
 ### Configuração
 
 ```bash
-> make configure
+make configure
 ```
 
 <div id='endpoints'></div> 
@@ -66,6 +66,13 @@ URLs de acesso:
 **POST** `{{dns}}/shipment`
 
 **Request**
+
+| Parâmetro         |  Tipo  | Descrição                  | Obrigatório |
+|:------------------|:------:|:---------------------------|:-----------:|
+| `person.name`     | String | Nome do destinatário.      |     Sim     |    
+| `person.distance` | float  | Distância do destinatário. |     Sim     |    
+| `product.name`    | String | Nome do produto.           |     Sim     |    
+| `product.weight`  | float  | Peso do produto.           |     Sim     |    
 
 ```json
 {
@@ -100,11 +107,11 @@ HTTP/1.1 200 OK
 - Executa todos os testes:
 
   ```bash
-  > make test
+  make test
   ```
 
 - Executa todos os testes, e gera o relatório de cobertura:
 
   ```bash
-  > make test-coverage
+  make test-coverage
   ```

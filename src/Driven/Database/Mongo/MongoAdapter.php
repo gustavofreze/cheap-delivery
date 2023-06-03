@@ -13,10 +13,10 @@ final class MongoAdapter
 
     private string $collectionName;
 
-    public function __construct(private DatabaseSettings $settings)
+    public function __construct(private readonly DatabaseSettings $settings)
     {
         $this->client = new Client(uri: $this->settings->getUri(), uriOptions: []);
-        $this->client->selectDatabase($this->settings->getDatabaseName());
+        $this->client->selectDatabase(databaseName: $this->settings->getDatabaseName());
     }
 
     public function collection(string $collectionName): MongoAdapter
@@ -32,6 +32,6 @@ final class MongoAdapter
             collectionName: $this->collectionName
         );
 
-        return $collection->find($filter, $options)->toArray();
+        return $collection->find(filter: $filter, options: $options)->toArray();
     }
 }

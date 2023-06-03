@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CheapDelivery\Driven\Carrier\Factories\Conditions;
 
-use CheapDelivery\Core\Models\Conditions\CostCondition;
+use CheapDelivery\Domain\Models\Conditions\CostCondition;
 
 interface CostConditionFactory
 {

@@ -13,6 +13,6 @@ final class EnvironmentAdapter implements Environment
         $value = getenv($variable);
         $template = 'Environment variable %s is missing';
 
-        return is_string($value) ? $value : throw new RuntimeException(sprintf($template, $variable));
+        return is_string($value) ? $value : throw new RuntimeException(message: sprintf($template, $variable));
     }
 }
