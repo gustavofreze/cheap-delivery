@@ -11,7 +11,7 @@ final class Name
     public function __construct(private readonly string $value)
     {
         if (empty($this->value)) {
-            throw new LogicException(message: 'Name cannot be empty');
+            throw new LogicException(message: 'Name cannot be empty.');
         }
     }
 

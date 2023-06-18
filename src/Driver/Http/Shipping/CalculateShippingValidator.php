@@ -2,17 +2,14 @@
 
 declare(strict_types=1);
 
-namespace CheapDelivery\Driver\Http\Actions\Shipping;
+namespace CheapDelivery\Driver\Http\Shipping;
 
-use CheapDelivery\Driver\Http\Exceptions\InvalidRequestPayload;
+use CheapDelivery\Driver\Http\Shared\Exceptions\InvalidRequest;
 use Respect\Validation\Exceptions\ValidationException;
 use Respect\Validation\Validator;
 
 final class CalculateShippingValidator
 {
-    /**
-     * @throws InvalidRequestPayload
-     */
     public function validate(mixed $request): void
     {
         try {
@@ -25,7 +22,7 @@ final class CalculateShippingValidator
             )->assert($request);
         } catch (ValidationException $exception) {
             /** @noinspection PhpPossiblePolymorphicInvocationInspection */
-            throw new InvalidRequestPayload(errors: $exception->getMessages());
+            throw new InvalidRequest(errors: $exception->getMessages());
         }
     }
 }

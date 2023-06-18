@@ -11,7 +11,7 @@ final class Distance
     public function __construct(private readonly float $value)
     {
         if ($this->value <= 0) {
-            throw new LogicException(message: 'Distance cannot be zero or negative');
+            throw new LogicException(message: 'Distance cannot be zero or negative.');
         }
     }
 

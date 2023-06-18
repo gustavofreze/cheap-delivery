@@ -1,7 +1,7 @@
 DOCKER_RUN = docker run --rm -it --net=host -v ${PWD}:/app -w /app gustavofreze/cheap-delivery
 DOCKER_EXEC = docker exec -it cheap-delivery
 
-.PHONY: run clean configure
+.PHONY: configure run test test-no-coverage review show-reports clean
 
 configure:
 	@docker-compose up -d --build
@@ -10,17 +10,17 @@ configure:
 run:
 	@${DOCKER_RUN} composer update --optimize-autoloader
 
-test: run
-	@${DOCKER_RUN} composer test
+test: run review
+	@${DOCKER_RUN} composer tests
 
-test-coverage: run
-	@${DOCKER_RUN} composer test-coverage
+test-no-coverage: run review
+	@${DOCKER_RUN} composer tests-no-coverage
 
-show-coverage:
-	@sensible-browser report/coverage-html/index.html
+review:
+	@${DOCKER_RUN} composer review
 
-review: run
-	@${DOCKER_RUN} composer phpmd
+show-reports:
+	@sensible-browser report/coverage/coverage-html/index.html
 
 clean:
 	@sudo chown -R ${USER}:${USER} ${PWD}
