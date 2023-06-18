@@ -1,41 +1,55 @@
 {
-  "name": "gustavofreze/cheap-delivery",
-  "description": "",
-  "type": "project",
-  "license": "MIT",
-  "minimum-stability": "stable",
-  "prefer-stable": true,
-  "config": {
-    "sort-packages": true
-  },
-  "autoload": {
-    "psr-4": {
-      "CheapDelivery\\": "src/"
+    "name": "gustavofreze/cheap-delivery",
+    "description": "POC de uma aplicação de domínio logístico.",
+    "type": "project",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "CheapDelivery\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "CheapDelivery\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^8.1||^8.2",
+        "slim/psr7": "^1.6",
+        "slim/slim": "4.11.0",
+        "respect/validation": "^2.2",
+        "php-di/slim-bridge": "^3.3",
+        "tiny-blocks/http": "^2.1",
+        "tiny-blocks/serializer": "^2.0",
+        "mongodb/mongodb": "1.*",
+        "ext-mongodb": "*",
+        "ext-pdo": "*"
+    },
+    "require-dev": {
+        "phpmd/phpmd": "^2.13",
+        "phpunit/phpunit": "^9.6",
+        "squizlabs/php_codesniffer": "^3.7",
+        "dg/bypass-finals": "^1.4"
+    },
+    "scripts": {
+        "phpcs": "phpcs --standard=PSR12 --extensions=php ./src",
+        "phpmd": "phpmd ./src text phpmd.xml --suffixes php --exclude --ignore-violations-on-exit",
+        "test": "phpunit --log-junit=report/coverage/junit.xml --coverage-xml=report/coverage/coverage-xml --coverage-html=report/coverage/coverage-html tests",
+        "test-no-coverage": "phpunit --no-coverage",
+        "review": [
+            "@phpcs",
+            "@phpmd"
+        ],
+        "tests": [
+            "@test"
+        ],
+        "tests-no-coverage": [
+            "@test-no-coverage"
+        ]
     }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "CheapDelivery\\": "tests/"
-    }
-  },
-  "require": {
-    "php": "^8.1.7",
-    "php-di/slim-bridge": "3.*",
-    "slim/psr7": "1.*",
-    "slim/slim": "4.*",
-    "respect/validation": "2.*",
-    "mongodb/mongodb": "1.*",
-    "ext-mongodb": "*",
-    "ext-pdo": "*"
-  },
-  "require-dev": {
-    "phpmd/phpmd": "2.*",
-    "phpunit/phpunit": "9.*",
-    "dg/bypass-finals": "1.*"
-  },
-  "scripts": {
-    "test": "phpunit --colors",
-    "test-coverage": "phpunit --log-junit=report/coverage/junit.xml --coverage-xml=report/coverage/coverage-xml --coverage-html ./report/coverage-html",
-    "phpmd": "phpmd ./src text phpmd.xml"
-  }
 }

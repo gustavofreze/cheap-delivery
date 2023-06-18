@@ -1,6 +1,6 @@
 <?php
 
-namespace CheapDelivery\Driver\Http;
+namespace CheapDelivery\Driver\Http\Shared;
 
 use Throwable;
 

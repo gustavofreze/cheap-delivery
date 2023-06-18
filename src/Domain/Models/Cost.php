@@ -11,7 +11,7 @@ final class Cost
     public function __construct(private readonly float $value)
     {
         if ($this->value <= 0) {
-            throw new LogicException(message: 'Cost cannot be zero or negative');
+            throw new LogicException(message: 'Cost cannot be zero or negative.');
         }
     }
 
