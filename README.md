@@ -7,7 +7,6 @@
     - [Repositório](#repository)
     - [Configuração](#settings)
 * [Endpoints](#endpoints)
-* [Testes](#tests)
 
 <div id="overview"></div> 
 
@@ -99,19 +98,3 @@ HTTP/1.1 200 OK
   "cost": 37.75
 }
 ```
-
-## Testes
-
-###### Executar testes em ambiente local.
-
-- Executa todos os testes:
-
-  ```bash
-  make test
-  ```
-
-- Executa todos os testes, e gera o relatório de cobertura:
-
-  ```bash
-  make test-coverage
-  ```

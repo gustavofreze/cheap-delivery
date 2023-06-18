@@ -12,8 +12,10 @@ final class Shipments
 
     public static function from(array $carriers, Weight $weight, Distance $distance): Shipments
     {
-        $results = array_map(fn(Carrier $carrier) => $carrier->shipment(weight: $weight, distance: $distance),
-            $carriers);
+        $results = array_map(fn(Carrier $carrier) => $carrier->shipment(
+            weight: $weight,
+            distance: $distance
+        ), $carriers);
         $shipments = array_filter($results, fn(?Shipment $carrier) => !is_null($carrier));
 
         return new Shipments($shipments);

@@ -1,8 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
-namespace CheapDelivery;
+namespace CheapDelivery\Starter;
 
 use CheapDelivery\Domain\Ports\Outbound\Carriers;
 use CheapDelivery\Driven\Carrier\CarrierRepository;
@@ -15,9 +13,15 @@ use CheapDelivery\Driven\Environment\EnvironmentAdapter;
 
 use function DI\autowire;
 
-return [
-    Carriers::class => autowire(CarrierRepository::class),
-    Environment::class => autowire(EnvironmentAdapter::class),
-    NoSqlDatabase::class => autowire(NoSqlDatabaseEngine::class),
-    DatabaseSettings::class => autowire(MongoSettings::class)
-];
+final class Dependencies
+{
+    public static function definitions(): array
+    {
+        return [
+            Carriers::class         => autowire(CarrierRepository::class),
+            Environment::class      => autowire(EnvironmentAdapter::class),
+            NoSqlDatabase::class    => autowire(NoSqlDatabaseEngine::class),
+            DatabaseSettings::class => autowire(MongoSettings::class)
+        ];
+    }
+}
