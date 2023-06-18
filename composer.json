@@ -26,7 +26,7 @@
         "php-di/slim-bridge": "^3.3",
         "tiny-blocks/http": "^2.1",
         "tiny-blocks/serializer": "^2.0",
-        "mongodb/mongodb": "^1.15",
+        "mongodb/mongodb": "1.*",
         "ext-mongodb": "*",
         "ext-pdo": "*"
     },
