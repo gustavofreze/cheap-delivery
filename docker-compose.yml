@@ -1,56 +1,64 @@
-version: '3.8'
+version: "3.9"
 
 services:
   cheap-delivery:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
     container_name: cheap-delivery
-    image: gustavofreze/cheap-delivery
-    restart: always
     env_file:
-      - ./config/configs.env
+      - ./config/local.env
     volumes:
-      - ./src:/var/www/html/src
-      - ./public:/var/www/html/public
-      - ./composer.json:/var/www/html/composer.json
+      - ./:/var/www/html
 
-  mongodb:
-    image: mongo:5.0
-    container_name: mongodb
-    hostname: mongodb
+  cheap-delivery-adm:
+    image: mysql:8.1
     restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
-      MONGO_INITDB_DATABASE: cheap_delivery
+    hostname: cheap-delivery-adm
+    container_name: cheap-delivery-adm
     ports:
-      - "27017:27017"
+      - "3307:3306"
+    environment:
+      TZ: "America/Sao_Paulo"
+      MYSQL_ROOT_PASSWORD: "root"
+    command: --default-authentication-plugin=mysql_native_password
     volumes:
-      - ./db/mongodb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./db/mysql/config:/scripts/config
+      - ./db/mysql/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
 
   nginx:
-    container_name: nginx
-    image: nginx:1.21.4
+    image: nginx:1.25-alpine
     restart: always
-    depends_on:
-      - cheap-delivery
+    container_name: nginx
     volumes:
       - ./public:/var/www/html
-      - ./config/nginx/nginx.conf:/etc/nginx/conf.d/site.conf
+      - ./config/nginx/site.conf:/etc/nginx/conf.d/site.conf
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.nginx.rule=Host(`cheap-delivery.localhost`)"
       - "traefik.http.routers.nginx.entrypoints=http"
+      - "traefik.http.routers.nginx.rule=Host(`cheap-delivery.localhost`)"
+    depends_on:
+      - cheap-delivery
 
   reverse-proxy:
-    container_name: reverse-proxy
-    image: traefik:v2.4
+    image: traefik:3.0
     restart: always
+    container_name: reverse-proxy
     command:
+      - "--log.level=INFO"
+      - "--accesslog=true"
       - "--api.insecure=true"
+      - "--api.dashboard=true"
       - "--providers.docker=true"
+      - "--entrypoints.http.address=:80"
       - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.http.address=:81"
     ports:
-      - "81:81"
+      - "80:80"
       - "8080:8080"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.localhost`)"
+      - "traefik.http.services.traefik.loadbalancer.server.port=8080"
     volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - /var/run/docker.sock:/var/run/docker.sock:ro

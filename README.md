@@ -14,7 +14,7 @@
 
 A empresa XPTO realizou um sorteio entre jogadores do Brasil inteiro, porém, os brindes precisam chegar a seus
 ganhadores de alguma maneira. Para tanto, é necessário implementar um sistema para calcular o menor custo para o envio
-de cada brinde de acordo com a distância do ganhador, e o peso do brinde. Ao entrar em contato com as transportadoras,
+de cada brinde conforme a distância do ganhador, e o peso do brinde. Ao entrar em contato com as transportadoras,
 recebemos as seguintes condições para o transporte:
 
 | Empresa         | Valor fixo | Valor km/kg |
@@ -52,9 +52,9 @@ make configure
 
 URLs de acesso:
 
-| Ambiente | DNS                                | 
-|:---------|:-----------------------------------|
-| `Local`  | http://cheap-delivery.localhost:81 |
+| Ambiente | DNS                             | 
+|:---------|:--------------------------------|
+| `Local`  | http://cheap-delivery.localhost |
 
 <div id="tests"></div> 
 
@@ -62,7 +62,7 @@ URLs de acesso:
 
 ###### Realiza o cálculo do menor custo de envio disponível.
 
-**POST** `{{dns}}/shipment`
+**POST** `{{dns}}/shipments`
 
 **Request**
 
@@ -75,14 +75,14 @@ URLs de acesso:
 
 ```json
 {
-  "person": {
-    "name": "Gustavo",
-    "distance": 150.00
-  },
-  "product": {
-    "name": "Notebook",
-    "weight": 3.70
-  }
+    "person": {
+        "name": "Gustavo",
+        "distance": 150.00
+    },
+    "product": {
+        "name": "Notebook",
+        "weight": 3.70
+    }
 }
 ```
 
@@ -94,7 +94,7 @@ HTTP/1.1 200 OK
 
 ```json
 {
-  "carrier": "DHL",
-  "cost": 37.75
+    "carrier": "DHL",
+    "cost": 37.75
 }
 ```
