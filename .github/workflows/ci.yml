@@ -16,6 +16,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Use PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
       - name: Install dependencies
         run: composer update --no-progress --optimize-autoloader
 
@@ -33,6 +38,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Use PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
       - name: Install dependencies
         run: composer update --no-progress --optimize-autoloader
 
@@ -40,3 +50,6 @@ jobs:
         env:
           XDEBUG_MODE: coverage
         run: composer test
+
+      - name: Run mutation tests
+        run: composer test-mutation
