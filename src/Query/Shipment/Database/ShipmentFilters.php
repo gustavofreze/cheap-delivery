@@ -17,7 +17,7 @@ final readonly class ShipmentFilters implements Filters
     {
         $carrierName = $data['carrierName'] ?? null;
 
-        return new ShipmentFilters($carrierName);
+        return new ShipmentFilters(carrierName: $carrierName);
     }
 
     public function toArray(): array

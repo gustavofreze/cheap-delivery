@@ -17,8 +17,8 @@ final readonly class Resource implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $filters = ShipmentFilters::from($request->getQueryParams());
-        $shipments = $this->facade->findAll($filters);
+        $filters = ShipmentFilters::from(data: $request->getQueryParams());
+        $shipments = $this->facade->findAll(filters: $filters);
 
         return HttpResponse::ok(data: $shipments);
     }
