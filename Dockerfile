@@ -6,7 +6,7 @@ LABEL author="Gustavo Freze" \
       org.label-schema.vcs-url="https://github.com/gustavofreze/cheap-delivery/blob/main/Dockerfile" \
       org.label-schema.schema-version="1.0"
 
-ARG FLYWAY_VERSION=10.6.0
+ARG FLYWAY_VERSION=10.8.1
 
 RUN docker-php-ext-install pdo_mysql
 

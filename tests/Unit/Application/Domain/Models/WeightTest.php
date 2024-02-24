@@ -23,6 +23,9 @@ class WeightTest extends TestCase
 
     public static function invalidValueProvider(): array
     {
-        return [[0.0], [-1.0]];
+        return [
+            'zero'     => ['value' => 0.0],
+            'negative' => ['value' => -1.0]
+        ];
     }
 }

@@ -2,19 +2,12 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          bootstrap="tests/bootstrap.php"
          backupGlobals="false"
-         colors="true" processIsolation="false"
+         colors="true"
+         processIsolation="false"
          stopOnFailure="false"
          xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
-         cacheDirectory=".phpunit.cache"
+         cacheResultFile="report/.phpunit.result.cache"
          backupStaticProperties="false">
-
-    <coverage>
-        <report>
-            <clover outputFile="report/coverage-clover.xml"/>
-            <html outputDirectory="report/html/"/>
-            <text outputFile="report/coverage.txt"/>
-        </report>
-    </coverage>
 
     <testsuites>
         <testsuite name="all">
@@ -27,10 +20,6 @@
             <directory suffix="Test.php">tests/Integration</directory>
         </testsuite>
     </testsuites>
-
-    <logging>
-        <junit outputFile="report/execution-result.xml"/>
-    </logging>
 
     <source>
         <include>

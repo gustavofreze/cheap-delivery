@@ -2,15 +2,14 @@
 
 namespace CheapDelivery\Application\Domain\Models\Commons;
 
-use BackedEnum;
 use Closure;
 use Traversable;
 
 trait Collection
 {
-    public function __construct(public mixed $items = [])
+    public function __construct(public iterable $items = [])
     {
-        $this->items = $this->toArrayFrom(items: $items);
+        $this->items = $this->normalize(items: $items);
     }
 
     public function add(mixed $item): static
@@ -22,10 +21,7 @@ trait Collection
 
     public function map(Closure $callback): static
     {
-        $keys = array_keys($this->items);
-        $items = array_map($callback, $this->items, $keys);
-
-        return new static(array_combine($keys, $items));
+        return new static(array_map($callback, $this->items));
     }
 
     public function all(): array
@@ -51,7 +47,7 @@ trait Collection
         }
 
         $sorted = clone $this;
-        $sorted->sortByAsc(callback: fn(mixed $first, mixed $second) => $callback($first) <=> $callback($second));
+        $sorted->sortByAsc(callback: fn(mixed $first, mixed $second) => ($callback($first) <=> $callback($second)));
 
         return $sorted->first();
     }
@@ -80,16 +76,11 @@ trait Collection
         return empty($this->items);
     }
 
-    private function toArrayFrom(mixed $items): array
+    private function normalize(iterable $items): array
     {
-        if (is_array($items)) {
-            return $items;
-        }
-
         return match (true) {
-            $items instanceof BackedEnum => [$items],
             $items instanceof Traversable => iterator_to_array($items),
-            default => (array)$items
+            default => $items
         };
     }
 }

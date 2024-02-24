@@ -10,5 +10,4 @@ namespace CheapDelivery\Application\Commands;
  */
 interface Command
 {
-
 }

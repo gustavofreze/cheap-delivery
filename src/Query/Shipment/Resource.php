@@ -3,6 +3,7 @@
 namespace CheapDelivery\Query\Shipment;
 
 use CheapDelivery\Query\Shipment\Database\Facade;
+use CheapDelivery\Query\Shipment\Database\ShipmentFilters;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -16,7 +17,8 @@ final readonly class Resource implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $shipments = $this->facade->findAll();
+        $filters = ShipmentFilters::from($request->getQueryParams());
+        $shipments = $this->facade->findAll($filters);
 
         return HttpResponse::ok(data: $shipments);
     }

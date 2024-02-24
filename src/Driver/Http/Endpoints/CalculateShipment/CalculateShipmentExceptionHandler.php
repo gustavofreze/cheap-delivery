@@ -18,7 +18,7 @@ final class CalculateShipmentExceptionHandler implements ExceptionHandler
         return match (get_class($exception)) {
             NoEligibleCarriers::class => HttpResponse::badRequest(data: $error),
             NoCarriersAvailable::class => HttpResponse::notFound(data: $error),
-            default => HttpResponse::internalServerError(data: $error),
+            default => HttpResponse::internalServerError(data: $error)
         };
     }
 }
