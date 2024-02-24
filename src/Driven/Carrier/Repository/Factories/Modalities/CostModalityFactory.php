@@ -11,5 +11,10 @@ interface CostModalityFactory
     public const PARTIAL = 'Partial';
     public const COMPOSITE = 'Composite';
 
+    /**
+     * Builds a CostModality instance based on the factory type.
+     *
+     * @return CostModality The created CostModality instance.
+     */
     public function build(): CostModality;
 }

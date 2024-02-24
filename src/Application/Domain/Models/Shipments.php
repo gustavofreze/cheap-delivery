@@ -27,7 +27,10 @@ final class Shipments implements Collectible
             throw new NoCarriersAvailable();
         }
 
-        $shipments = $carriers->map(fn(Carrier $carrier) => $carrier->shipment(weight: $weight, distance: $distance));
+        $shipments = $carriers->map(callback: fn(Carrier $carrier) => $carrier->shipment(
+            weight: $weight,
+            distance: $distance
+        ));
 
         return new Shipments(shipments: $shipments);
     }
@@ -36,8 +39,8 @@ final class Shipments implements Collectible
     {
         $shipment = $this->shipments
             ->filter()
-            ->map(fn(Shipment $shipment) => $shipment)
-            ->minBy(fn(Shipment $shipment) => $shipment->cost->value);
+            ->map(callback: fn(Shipment $shipment) => $shipment)
+            ->minBy(callback: fn(Shipment $shipment) => $shipment->cost->value);
 
         if (is_null($shipment)) {
             throw new NoEligibleCarriers();
