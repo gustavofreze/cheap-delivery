@@ -32,6 +32,7 @@ final class MySqlQueryBuilder implements QueryBuilder
             foreach ($data as $column => $value) {
                 $this->statement->bindValue($column, $value);
             }
+
             return $this;
         } catch (Throwable $exception) {
             throw new MySqlFailure(error: 'Binding values', exception: $exception);
