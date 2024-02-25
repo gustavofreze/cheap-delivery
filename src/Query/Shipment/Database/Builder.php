@@ -12,7 +12,7 @@ final class Builder
             'carrier'   => [
                 'name' => $shipment['carrierName']
             ],
-            'createdAt' => $shipment['createdAt']
+            'createdAt' => date('c', strtotime($shipment['createdAt']))
         ];
 
         return array_map(fn(array $shipment) => $mapper(shipment: $shipment), $shipments);

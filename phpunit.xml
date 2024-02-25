@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+         colors="true"
          bootstrap="tests/bootstrap.php"
          backupGlobals="false"
-         colors="true"
-         processIsolation="false"
          stopOnFailure="false"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+         executionOrder="default"
          cacheResultFile="report/.phpunit.result.cache"
+         processIsolation="false"
          backupStaticProperties="false">
 
     <testsuites>
@@ -26,9 +27,17 @@
             <directory suffix=".php">src</directory>
         </include>
         <exclude>
-            <file>src/routes.php</file>
-            <file>src/bootstrap.php</file>
+            <file>src/Routes.php</file>
+            <file>src/Dependencies.php</file>
         </exclude>
     </source>
+
+    <php>
+        <env name="MYSQL_DATABASE_HOST" value="cheap-delivery-adm"/>
+        <env name="MYSQL_DATABASE_PORT" value="3306"/>
+        <env name="MYSQL_DATABASE_NAME" value="cheap_delivery_adm_test"/>
+        <env name="MYSQL_DATABASE_USER" value="root"/>
+        <env name="MYSQL_DATABASE_PASSWORD" value="root"/>
+    </php>
 
 </phpunit>

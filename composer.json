@@ -12,10 +12,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "CheapDelivery\\": [
-                "tests/Unit/",
-                "tests/Integration/"
-            ]
+            "Test\\": "tests/",
+            "CheapDelivery\\": "tests/Unit/"
         }
     },
     "require": {

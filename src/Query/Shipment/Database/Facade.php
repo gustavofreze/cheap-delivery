@@ -21,6 +21,7 @@ final readonly class Facade
             ])
             ->from('shipment')
             ->applyFilters($filters)
+            ->orderBy('created_at', 'DESC')
             ->executeQuery()
             ->fetchAllAssociative();
 

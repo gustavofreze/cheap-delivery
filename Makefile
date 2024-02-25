@@ -2,10 +2,11 @@ IMAGE = gustavofreze/php:8.2
 DOCKER_RUN = docker run -u root --rm -it --net=host -v ${PWD}:/app -w /app ${IMAGE}
 DOCKER_EXEC = docker exec -it cheap-delivery
 
+INTEGRATION_TEST = docker run -u root --rm -it --name cheap-delivery-integration-test --link cheap-delivery-adm --network=cheap-delivery_default -v ${PWD}:/app -w /app ${IMAGE}
+
 FLYWAY = docker run --rm -v ${PWD}/db/mysql/migrations:/flyway/sql --env-file=config/local.env --link cheap-delivery-adm --network=cheap-delivery_default -e FLYWAY_EDITION="community" flyway/flyway:10.8.1
 MIGRATE_DB = ${FLYWAY} -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm
-
-.PHONY: configure run test test-no-coverage review fix-style show-coverage clean migrate-database clean-database
+MIGRATE_TEST_DB = ${FLYWAY} -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm_test
 
 configure:
 	@docker-compose up -d --build
@@ -13,17 +14,17 @@ configure:
 configure-local:
 	@${DOCKER_RUN} composer update --optimize-autoloader
 
-test:
-	@${DOCKER_RUN} composer run tests
+test: migrate-test-database
+	@${INTEGRATION_TEST} composer run tests
 
-test-no-coverage:
-	@${DOCKER_RUN} composer run test-no-coverage
+test-no-coverage: migrate-test-database
+	@${INTEGRATION_TEST} composer run test-no-coverage
 
 test-unit:
 	@${DOCKER_RUN} composer run test-unit
 
-test-integration:
-	@${DOCKER_RUN} composer run test-integration
+test-integration: migrate-test-database
+	@${INTEGRATION_TEST} composer run test-integration
 
 review:
 	@${DOCKER_RUN} composer review
@@ -43,3 +44,7 @@ migrate-database:
 
 clean-database:
 	@${MIGRATE_DB} clean
+
+migrate-test-database:
+	@${MIGRATE_TEST_DB} clean
+	@${MIGRATE_TEST_DB} migrate
