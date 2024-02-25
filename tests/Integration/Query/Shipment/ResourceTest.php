@@ -3,9 +3,10 @@
 namespace Test\Integration\Query\Shipment;
 
 use CheapDelivery\Query\Shipment\Resource;
-use Psr\Http\Message\ServerRequestInterface;
 use Test\Integration\IntegrationTestCapabilities;
 use Test\Integration\Query\Shipment\Factories\IsoDate;
+use Test\Integration\Query\Shipment\Factories\QueryAdapter;
+use Test\Integration\Query\Shipment\Factories\Request;
 
 final class ResourceTest extends IntegrationTestCapabilities
 {
@@ -50,7 +51,7 @@ final class ResourceTest extends IntegrationTestCapabilities
         $this->query->saveShipments(shipments: $shipments);
 
         /** @And I have a request to fetch the persisted shipments without filters */
-        $request = $this->requestWith(parameters: []);
+        $request = Request::getFrom(parameters: []);
 
         /** @When I make the request */
         $response = $this->resource->handle(request: $request);
@@ -88,7 +89,7 @@ final class ResourceTest extends IntegrationTestCapabilities
         $this->query->saveShipments(shipments: $shipments);
 
         /** @And I have a request to fetch the persisted shipments with filters */
-        $request = $this->requestWith(parameters: ['carrierName' => 'DHL']);
+        $request = Request::getFrom(parameters: ['carrierName' => 'DHL']);
 
         /** @When I make the request */
         $response = $this->resource->handle(request: $request);
@@ -101,18 +102,5 @@ final class ResourceTest extends IntegrationTestCapabilities
         self::assertEquals($shipments[0]['cost'], $actual[0]['cost']);
         self::assertEquals($shipments[0]['carrier'], $actual[0]['carrier']);
         self::assertEquals($shipments[0]['createdAt'], $actual[0]['createdAt']);
-    }
-
-    private function requestWith(array $parameters): ServerRequestInterface
-    {
-        $request = $this->getMockBuilder(ServerRequestInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $request->expects(self::once())
-            ->method('getQueryParams')
-            ->willReturn($parameters);
-
-        return $request;
     }
 }

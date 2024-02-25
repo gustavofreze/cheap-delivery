@@ -1,6 +1,6 @@
 <?php
 
-namespace Test\Integration\Query\Shipment;
+namespace Test\Integration\Query\Shipment\Factories;
 
 use Doctrine\DBAL\Connection;
 use Psr\Container\ContainerInterface;
