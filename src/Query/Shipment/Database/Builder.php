@@ -4,6 +4,10 @@ namespace CheapDelivery\Query\Shipment\Database;
 
 final class Builder
 {
+    /**
+     * @param array $shipments
+     * @return mixed[]
+     */
     public static function from(array $shipments): array
     {
         $mapper = fn(array $shipment) => [

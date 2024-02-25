@@ -2,9 +2,6 @@
 
 namespace CheapDelivery;
 
-use Doctrine\DBAL\Configuration;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DriverManager;
 use CheapDelivery\Application\Ports\Outbound\CarriersRepository;
 use CheapDelivery\Application\Ports\Outbound\ShipmentsRepository;
 use CheapDelivery\Driven\Carrier\Repository\Adapter as CarriersRepositoryAdapter;
@@ -14,12 +11,18 @@ use CheapDelivery\Driven\Shared\OutboxEvent\Adapter as OutboxEventAdapter;
 use CheapDelivery\Driven\Shared\OutboxEvent\OutboxEvent;
 use CheapDelivery\Driven\Shipment\Repository\Adapter as ShipmentsRepositoryAdapter;
 use CheapDelivery\Query\Shipment\Database\Facade as ShipmentFacade;
+use Doctrine\DBAL\Configuration;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DriverManager;
 use PDO;
 
 use function DI\autowire;
 
 final class Dependencies
 {
+    /**
+     * @return mixed[]
+     */
     public static function definitions(): array
     {
         return [
@@ -27,11 +30,11 @@ final class Dependencies
                 return DriverManager::getConnection(
                     [
                         'driver'        => 'pdo_mysql',
-                        'host'          => getenv('MYSQL_DATABASE_HOST'),
-                        'user'          => getenv('MYSQL_DATABASE_USER'),
-                        'port'          => getenv('MYSQL_DATABASE_PORT'),
-                        'dbname'        => getenv('MYSQL_DATABASE_NAME'),
-                        'password'      => getenv('MYSQL_DATABASE_PASSWORD'),
+                        'host'          => Environment::get(variable: 'MYSQL_DATABASE_HOST')->toString(),
+                        'user'          => Environment::get(variable: 'MYSQL_DATABASE_USER')->toString(),
+                        'port'          => Environment::get(variable: 'MYSQL_DATABASE_PORT')->toInt(),
+                        'dbname'        => Environment::get(variable: 'MYSQL_DATABASE_NAME')->toString(),
+                        'password'      => Environment::get(variable: 'MYSQL_DATABASE_PASSWORD')->toString(),
                         'driverOptions' => [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']
                     ],
                     new Configuration()

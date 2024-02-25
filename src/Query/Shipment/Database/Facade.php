@@ -10,6 +10,10 @@ final readonly class Facade
     {
     }
 
+    /**
+     * @param ShipmentFilters $filters
+     * @return mixed[]
+     */
     public function findAll(ShipmentFilters $filters): array
     {
         $shipments = $this->queryBuilder

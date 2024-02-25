@@ -7,13 +7,17 @@ use CheapDelivery\Application\Domain\Models\Commons\Uuid;
 
 final class ShipmentId implements Identity
 {
-    public function __construct(public ?Uuid $value = null)
+    private function __construct(public Uuid $value)
+    {
+    }
+
+    public static function create(?Uuid $value = null): ShipmentId
     {
         if (is_null($value)) {
             $value = Uuid::generateV4();
         }
 
-        $this->value = $value;
+        return new ShipmentId(value: $value);
     }
 
     public function getValue(): string

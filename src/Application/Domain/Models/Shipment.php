@@ -10,6 +10,6 @@ readonly final class Shipment
 
     public static function from(Cost $cost, Name $carrierName): Shipment
     {
-        return new Shipment(id: new ShipmentId(), cost: $cost, carrierName: $carrierName);
+        return new Shipment(id: ShipmentId::create(), cost: $cost, carrierName: $carrierName);
     }
 }

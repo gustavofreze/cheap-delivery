@@ -17,13 +17,13 @@
     "mutators": {
         "@default": true,
         "BCMath": false,
-        "TrueValue": false,
+        "CastInt": false,
+        "CastFloat": false,
+        "CastString": false,
         "InstanceOf_": false,
         "CloneRemoval": false,
-        "MatchArmRemoval": false,
         "PublicVisibility": false,
-        "MethodCallRemoval": false,
-        "ProtectedVisibility": false
+        "MethodCallRemoval": false
     },
     "testFramework": "phpunit"
 }

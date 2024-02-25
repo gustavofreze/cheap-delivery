@@ -2,7 +2,9 @@
 
 namespace CheapDelivery\Driven\Shared\Database;
 
-interface DatabaseFailure
+use Throwable;
+
+interface DatabaseFailure extends Throwable
 {
     /**
      * Get a string representation of the failure's trace.

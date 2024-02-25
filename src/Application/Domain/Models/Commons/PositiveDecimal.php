@@ -2,10 +2,8 @@
 
 namespace CheapDelivery\Application\Domain\Models\Commons;
 
-use AllowDynamicProperties;
 use CheapDelivery\Application\Domain\Exceptions\NonPositiveValue;
 
-#[AllowDynamicProperties]
 class PositiveDecimal
 {
     private const SCALE = 2;
@@ -19,16 +17,16 @@ class PositiveDecimal
 
     public function add(PositiveDecimal $addend): PositiveDecimal
     {
-        $result = bcadd($this->value, $addend->value, self::SCALE);
+        $result = bcadd((string)$this->value, (string)$addend->value, self::SCALE);
 
-        return new PositiveDecimal(value: $result);
+        return new PositiveDecimal(value: (float)$result);
     }
 
     public function multiply(PositiveDecimal $multiplier): PositiveDecimal
     {
-        $result = bcmul($this->value, $multiplier->value, self::SCALE);
+        $result = bcmul((string)$this->value, (string)$multiplier->value, self::SCALE);
 
-        return new PositiveDecimal(value: $result);
+        return new PositiveDecimal(value: (float)$result);
     }
 
     public function isLessThan(PositiveDecimal $other): bool

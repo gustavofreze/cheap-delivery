@@ -25,7 +25,7 @@ interface Collectible
     /**
      * Get all the items in the collection.
      *
-     * @return array
+     * @return mixed[]
      */
     public function all(): array;
 
