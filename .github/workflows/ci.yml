@@ -52,6 +52,11 @@ jobs:
       - name: Install dependencies
         run: composer update --no-progress --optimize-autoloader
 
+      - name: Run database migrations
+        run: |
+          FLYWAY="docker run --rm -v ${PWD}/db/mysql/migrations:/flyway/sql --env-file=config/local.env --link cheap-delivery-adm --network=cheap-delivery_default -e FLYWAY_EDITION=community flyway/flyway:10.8.1"
+          ${FLYWAY} -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm_test
+
       - name: Run tests
         env:
           XDEBUG_MODE: coverage
