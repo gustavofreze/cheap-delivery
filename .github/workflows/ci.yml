@@ -55,7 +55,7 @@ jobs:
       - name: Create test database
         run: |
           docker cp ./db/mysql/init-db.sh cheap-delivery-adm:/init-db.sh
-          docker exec cheap-delivery-adm --link cheap-delivery-adm sh -c "chmod +x /init-db.sh && /init-db.sh"
+          docker exec -it cheap-delivery-adm sh -c "chmod +x /init-db.sh && /init-db.sh"
 
       - name: Run database migrations
         run: |
