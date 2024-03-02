@@ -4,7 +4,7 @@ namespace CheapDelivery\Application\Domain\Models\Commons;
 
 final readonly class Uuid
 {
-    private function __construct(private string $value)
+    public function __construct(private string $value)
     {
     }
 

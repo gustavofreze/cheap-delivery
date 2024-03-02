@@ -5,9 +5,9 @@ namespace CheapDelivery\Driven\Shared\OutboxEvent\Commons;
 interface Snapshot
 {
     /**
-     * Convert the snapshot to an array.
+     * Converts the snapshot to a JSON string.
      *
-     * @return mixed[] The snapshot as an array.
+     * @return string The JSON representation of the snapshot.
      */
-    public function toArray(): array;
+    public function toJson(): string;
 }

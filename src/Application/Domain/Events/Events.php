@@ -2,10 +2,8 @@
 
 namespace CheapDelivery\Application\Domain\Events;
 
-use CheapDelivery\Application\Domain\Models\Commons\Collectible;
 use CheapDelivery\Application\Domain\Models\Commons\Collection;
 
-final class Events implements Collectible
+final class Events extends Collection
 {
-    use Collection;
 }

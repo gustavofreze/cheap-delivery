@@ -2,24 +2,24 @@
 
 namespace CheapDelivery\Driven\Carrier\Repository;
 
-use CheapDelivery\Application\Domain\Models\Carriers;
-use CheapDelivery\Application\Ports\Outbound\CarriersRepository;
+use CheapDelivery\Application\Domain\Models\Carriers as CarriersCollection;
+use CheapDelivery\Application\Ports\Outbound\Carriers;
 use CheapDelivery\Driven\Shared\Database\RelationalConnection;
 
-final readonly class Adapter implements CarriersRepository
+final readonly class Adapter implements Carriers
 {
     public function __construct(private RelationalConnection $connection)
     {
     }
 
-    public function findAll(): Carriers
+    public function findAll(): CarriersCollection
     {
         $result = $this->connection
             ->with()
             ->query(sql: Queries::FIND_ALL)
             ->execute()
-            ->map(fn(array $record) => Record::from(value: $record)->toCarrier());
+            ->map(callback: fn(array $record) => Record::from(value: $record)->toCarrier());
 
-        return new Carriers(items: $result);
+        return new CarriersCollection(elements: $result);
     }
 }

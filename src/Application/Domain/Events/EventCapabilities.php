@@ -6,10 +6,10 @@ use ReflectionClass;
 
 trait EventCapabilities
 {
-    public function getType(): string
+    public function type(): string
     {
         return (new ReflectionClass($this))->getShortName();
     }
 
-    abstract public function getRevision(): int;
+    abstract public function revision(): int;
 }

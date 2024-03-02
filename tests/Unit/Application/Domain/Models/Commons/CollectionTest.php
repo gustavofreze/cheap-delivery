@@ -8,17 +8,17 @@ use Iterator;
 use IteratorAggregate;
 use PHPUnit\Framework\TestCase;
 
-final class CollectionTest extends TestCase
+class CollectionTest extends TestCase
 {
     /**
-     * @param iterable $items
+     * @param iterable $elements
      * @param array $expected
      * @return void
      * @dataProvider itemsProvider
      */
-    public function testNormalize(iterable $items, array $expected): void
+    public function testNormalize(iterable $elements, array $expected): void
     {
-        $actual = new SomeThings(items: $items);
+        $actual = new SomeThings(elements: $elements);
 
         self::assertEquals($expected, $actual->all());
     }

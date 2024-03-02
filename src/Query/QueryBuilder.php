@@ -4,7 +4,7 @@ namespace CheapDelivery\Query;
 
 use Doctrine\DBAL\Query\QueryBuilder as DoctrineQueryBuilder;
 
-final class QueryBuilder extends DoctrineQueryBuilder
+class QueryBuilder extends DoctrineQueryBuilder
 {
     private const AND_WHERE = '%s = :%s';
 

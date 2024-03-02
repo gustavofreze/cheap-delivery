@@ -2,10 +2,10 @@
 
 namespace CheapDelivery;
 
-use CheapDelivery\Driver\Http\Endpoints\CalculateShipment\CalculateShipment;
-use CheapDelivery\Driver\Http\Endpoints\CalculateShipment\CalculateShipmentExceptionHandler;
+use CheapDelivery\Driver\Http\Endpoints\Dispatch\DispatchWithLowestCost;
+use CheapDelivery\Driver\Http\Endpoints\Dispatch\DispatchExceptionHandler;
 use CheapDelivery\Driver\Http\Middlewares\ErrorHandling;
-use CheapDelivery\Query\Shipment\Resource;
+use CheapDelivery\Query\Dispatch\Resource;
 use Slim\App;
 use Slim\Handlers\Strategies\RequestResponseArgs;
 use Slim\Interfaces\RouteCollectorProxyInterface;
@@ -23,10 +23,10 @@ final readonly class Routes
         $this->app->addErrorMiddleware(true, true, true);
         $this->app->addBodyParsingMiddleware();
 
-        $this->app->group('/shipments', function (RouteCollectorProxyInterface $group) {
+        $this->app->group('/dispatches', function (RouteCollectorProxyInterface $group) {
             $group->get('', Resource::class);
-            $group->post('', CalculateShipment::class)->addMiddleware(
-                new ErrorHandling(exceptionHandler: new CalculateShipmentExceptionHandler())
+            $group->post('', DispatchWithLowestCost::class)->addMiddleware(
+                new ErrorHandling(exceptionHandler: new DispatchExceptionHandler())
             );
         });
     }

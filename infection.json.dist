@@ -19,11 +19,14 @@
         "BCMath": false,
         "CastInt": false,
         "CastFloat": false,
+        "ArrayItem": false,
         "CastString": false,
         "InstanceOf_": false,
-        "CloneRemoval": false,
+        "MatchArmRemoval": false,
+        "ArrayItemRemoval": false,
         "PublicVisibility": false,
-        "MethodCallRemoval": false
+        "MethodCallRemoval": false,
+        "NullSafePropertyCall": false
     },
     "testFramework": "phpunit"
 }

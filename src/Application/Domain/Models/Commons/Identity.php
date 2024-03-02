@@ -13,12 +13,4 @@ interface Identity
      * @return mixed The unique identifier.
      */
     public function getValue(): mixed;
-
-    /**
-     * Checks if two identities are equal.
-     *
-     * @param Identity $other The other identity to compare.
-     * @return bool True if equal, false otherwise.
-     */
-    public function equals(Identity $other): bool;
 }

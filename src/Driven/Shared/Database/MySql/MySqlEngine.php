@@ -13,7 +13,7 @@ final class MySqlEngine implements RelationalConnection
 
     public function __construct(private readonly Connection $connection)
     {
-        $this->queryBuilder = new MySqlQueryBuilder($this->connection);
+        $this->queryBuilder = new MySqlQueryBuilder(connection: $this->connection);
     }
 
     public function with(): MySqlQueryBuilder

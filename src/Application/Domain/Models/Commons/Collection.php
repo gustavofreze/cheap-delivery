@@ -3,38 +3,47 @@
 namespace CheapDelivery\Application\Domain\Models\Commons;
 
 use Closure;
+use Generator;
 use Traversable;
 
-trait Collection
+/**
+ * @implements Collectible<mixed, mixed>
+ */
+class Collection implements Collectible
 {
-    public function __construct(public iterable $items = [])
+    /**
+     * @var mixed[]
+     */
+    private array $elements;
+
+    /**
+     * @param mixed[] $elements
+     */
+    public function __construct(iterable $elements = [])
     {
-        $this->items = $this->normalize(items: $items);
+        $this->elements = $this->normalize(elements: $elements);
     }
 
-    public function add(mixed $item): static
+    public function add(mixed $element): Collectible
     {
-        $this->items[] = $item;
-
+        $this->elements[] = $element;
         return $this;
     }
 
-    public function map(Closure $callback): static
+    public function map(Closure $callback): Collectible
     {
-        return new static(array_map($callback, $this->items));
+        return new self(array_map($callback, $this->elements));
     }
 
     public function all(): array
     {
-        return $this->items;
+        return $this->elements;
     }
 
-    public function each(Closure $callback): static
+    public function each(Closure $callback): Collectible
     {
-        foreach ($this->items as $key => $item) {
-            if ($callback($item, $key) === false) {
-                break;
-            }
+        foreach ($this->elements as $key => $element) {
+            $callback($element, $key);
         }
 
         return $this;
@@ -46,41 +55,42 @@ trait Collection
             return null;
         }
 
-        $sorted = clone $this;
-        $sorted->sortByAsc(callback: fn(mixed $first, mixed $second) => ($callback($first) <=> $callback($second)));
+        usort($this->elements, fn(mixed $first, mixed $second) => $callback($first) <=> $callback($second));
 
-        return $sorted->first();
+        return $this->first();
     }
 
-    public function filter(?Closure $callback = null): static
+    public function filter(?Closure $callback = null): Collectible
     {
-        return new static(array_filter($this->items, $callback));
-    }
-
-    public function sortByAsc(Closure $callback): static
-    {
-        $sortedItems = $this->items;
-        usort($sortedItems, fn(mixed $first, mixed $second) => $callback($first, $second));
-        $this->items = $sortedItems;
-
-        return $this;
+        return new self(array_filter($this->elements, $callback));
     }
 
     public function first(): mixed
     {
-        return reset($this->items);
+        return reset($this->elements);
     }
 
     public function isEmpty(): bool
     {
-        return empty($this->items);
+        return empty($this->elements);
     }
 
-    private function normalize(iterable $items): array
+    public function getIterator(): Generator
+    {
+        foreach ($this->elements as $element) {
+            yield $element;
+        }
+    }
+
+    /**
+     * @param mixed[] $elements
+     * @return mixed[]
+     */
+    private function normalize(iterable $elements): array
     {
         return match (true) {
-            $items instanceof Traversable => iterator_to_array($items),
-            default => $items
+            $elements instanceof Traversable => iterator_to_array($elements),
+            default => $elements
         };
     }
 }

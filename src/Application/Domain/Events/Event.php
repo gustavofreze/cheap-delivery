@@ -2,6 +2,9 @@
 
 namespace CheapDelivery\Application\Domain\Events;
 
+/**
+ * Represents an event in the domain.
+ */
 interface Event
 {
     /**
@@ -9,12 +12,12 @@ interface Event
      *
      * @return string The event type.
      */
-    public function getType(): string;
+    public function type(): string;
 
     /**
-     * Gets the revision number of the event.
+     * Gets the revision of the event.
      *
-     * @return int The event revision number.
+     * @return int The event revision.
      */
-    public function getRevision(): int;
+    public function revision(): int;
 }

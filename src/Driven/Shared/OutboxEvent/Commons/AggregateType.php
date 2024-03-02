@@ -2,14 +2,22 @@
 
 namespace CheapDelivery\Driven\Shared\OutboxEvent\Commons;
 
-use InvalidArgumentException;
+use ReflectionClass;
+use ReflectionException;
 
 final class AggregateType
 {
-    public function __construct(public string $value)
+    private function __construct(public string $value)
     {
-        if (empty($value)) {
-            throw new InvalidArgumentException(message: 'Aggregate type cannot be empty.');
-        }
+    }
+
+    /**
+     * @param class-string $class
+     * @return AggregateType
+     * @throws ReflectionException
+     */
+    public static function from(string $class): AggregateType
+    {
+        return new AggregateType(value: (new ReflectionClass(objectOrClass: $class))->getShortName());
     }
 }
