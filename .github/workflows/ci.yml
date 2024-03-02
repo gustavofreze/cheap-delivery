@@ -55,7 +55,7 @@ jobs:
       - name: Run database migrations
         run: |
           FLYWAY="docker run --rm -v ${PWD}/db/mysql/migrations:/flyway/sql --env-file=config/local.env -e FLYWAY_EDITION=community flyway/flyway:10.8.1"
-          ${FLYWAY} -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm_test
+          ${FLYWAY} -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm_test migrate
 
       - name: Run tests
         env:
