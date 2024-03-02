@@ -37,7 +37,9 @@ jobs:
           MYSQL_DATABASE: cheap_delivery_adm_test
           MYSQL_ROOT_PASSWORD: root
         ports:
-          - 3306
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -53,6 +55,5 @@ jobs:
       - name: Run tests
         env:
           XDEBUG_MODE: coverage
-          DATABASE_HOST: cheap-delivery-adm
-          DATABASE_PORT: 3306
+          MYSQL_DATABASE_HOST: 127.0.0.1
         run: composer test
