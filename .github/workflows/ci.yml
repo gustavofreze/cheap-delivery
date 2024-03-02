@@ -37,13 +37,8 @@ jobs:
           MYSQL_DATABASE: cheap_delivery_adm_test
           MYSQL_ROOT_PASSWORD: root
         ports:
-          - 3307:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
+          - 3306
     steps:
-      - name: Update hosts file
-        run: echo "172.17.0.2 cheap-delivery-adm" | sudo tee -a /etc/hosts
-
       - name: Checkout
         uses: actions/checkout@v3
 
@@ -58,4 +53,6 @@ jobs:
       - name: Run tests
         env:
           XDEBUG_MODE: coverage
+          DATABASE_HOST: cheap-delivery-adm
+          DATABASE_PORT: 3306
         run: composer test
