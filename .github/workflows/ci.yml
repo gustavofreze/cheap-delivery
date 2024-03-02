@@ -30,15 +30,6 @@ jobs:
   tests:
     name: Tests
     runs-on: ubuntu-latest
-    services:
-      cheap-delivery-adm:
-        image: mysql:8.1
-        env:
-          MYSQL_DATABASE: cheap_delivery_adm_test
-          MYSQL_ROOT_PASSWORD: root
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Checkout
@@ -51,6 +42,10 @@ jobs:
 
       - name: Install dependencies
         run: composer update --no-progress --optimize-autoloader
+
+      - name: Start MySQL
+        run: |
+          sudo /etc/init.d/mysql start
 
       - name: Run database migrations
         run: |
