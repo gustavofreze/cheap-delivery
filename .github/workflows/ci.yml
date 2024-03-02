@@ -39,9 +39,6 @@ jobs:
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-        volumes:
-        - ./db/mysql/config:/scripts/config
-        - ./db/mysql/init-db.sh:/docker-entrypoint-initdb.d/init-db.sh
 
     steps:
       - name: Checkout
@@ -54,6 +51,11 @@ jobs:
 
       - name: Install dependencies
         run: composer update --no-progress --optimize-autoloader
+
+      - name: Create test database
+        run: |
+          docker cp ./db/mysql/init-db.sh cheap-delivery-adm:/init-db.sh
+          docker exec cheap-delivery-adm sh -c "chmod +x /init-db.sh && /init-db.sh"
 
       - name: Run database migrations
         run: |
