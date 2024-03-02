@@ -52,11 +52,6 @@ jobs:
       - name: Install dependencies
         run: composer update --no-progress --optimize-autoloader
 
-      - name: Create test database
-        run: |
-          docker cp ./db/mysql/init-db.sh cheap-delivery-adm:/init-db.sh
-          docker exec -it cheap-delivery-adm sh -c "chmod +x /init-db.sh && /init-db.sh"
-
       - name: Run database migrations
         run: |
           FLYWAY="docker run --rm -v ${PWD}/db/mysql/migrations:/flyway/sql --env-file=config/local.env --link cheap-delivery-adm -e FLYWAY_EDITION=community flyway/flyway:10.8.1"
