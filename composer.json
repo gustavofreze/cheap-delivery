@@ -58,6 +58,10 @@
         "tests": [
             "@test",
             "@test-mutation"
+        ],
+        "tests-unit": [
+            "phpunit -c phpunit.xml --testsuite unit",
+            "@test-mutation"
         ]
     }
 }

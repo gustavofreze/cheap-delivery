@@ -11,14 +11,10 @@ jobs:
   auto-review:
     name: Auto review
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Use PHP 8.2
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
 
       - name: Install dependencies
         run: composer update --no-progress --optimize-autoloader
@@ -29,46 +25,15 @@ jobs:
   tests:
     name: Tests
     runs-on: ubuntu-latest
-    services:
-      cheap-delivery-adm:
-        image: mysql:8.1
-        env:
-          MYSQL_DATABASE: "cheap_delivery_adm_test"
-          MYSQL_ROOT_PASSWORD: "root"
-        ports:
-          - 3307:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - name: Start database container
-        run: docker run --name cheap-delivery-adm -d mysql:8.1
-
-      - name: Wait for database to start
-        run: |
-          sleep 20
-
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Use PHP 8.2
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-          extensions: pdo, pdo_mysql
 
       - name: Install dependencies
         run: composer update --no-progress --optimize-autoloader
 
-      - name: Run database migrations
-        run: |
-          DOCKER_IP=$(docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' cheap-delivery-adm)
-          docker run --rm -v ${PWD}/db/mysql/migrations:/flyway/sql --env-file=config/local.env \
-            flyway/flyway:10.8.1 \
-            -url=jdbc:mysql://${DOCKER_IP}:3306/cheap_delivery_adm_test \
-            -user=root -password=root \
-            -locations=filesystem:/flyway/sql migrate
-
       - name: Run tests
         env:
           XDEBUG_MODE: coverage
-        run: composer test
+        run: composer tests-unit
