@@ -59,7 +59,6 @@ jobs:
         run: |
           docker run --rm -v ${PWD}/db/mysql/migrations:/flyway/sql --env-file=config/local.env \
             flyway/flyway:10.8.1 \
-            -url=jdbc:mysql://127.0.0.1:3306/cheap_delivery_adm_test \
             -locations=filesystem:/flyway/sql \
             -schemas=cheap_delivery_adm_test \
             migrate
