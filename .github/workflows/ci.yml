@@ -45,10 +45,7 @@ jobs:
 
       - name: Wait for database to start
         run: |
-          until docker exec cheap-delivery-adm mysqladmin ping --silent; do
-            echo "Waiting for database to start..."
-            sleep 5
-          done
+          sleep 20
 
       - name: Checkout
         uses: actions/checkout@v3
