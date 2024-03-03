@@ -61,17 +61,9 @@ jobs:
       - name: Connect database container to network
         run: docker network connect cheap-delivery_default cheap-delivery-adm || true
 
-      - name: Wait for database
-        run: |
-          until nc -z -v -w5 cheap-delivery-adm 3306
-          do
-            echo "Waiting for connection..."
-            sleep 3
-          done
-
       - name: Run database migrations
         run: docker run --rm -v ${PWD}/db/mysql/migrations:/flyway/sql \
-          --env-file=config/local.env flyway/flyway:10.8.1 \
+          --env-file=config/local.env --link cheap-delivery-adm flyway/flyway:10.8.1 \
           -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm_test migrate
 
       - name: Run tests
