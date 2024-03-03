@@ -30,6 +30,15 @@ jobs:
   tests:
     name: Tests
     runs-on: ubuntu-latest
+    services:
+      cheap-delivery-adm:
+        image: mysql:8.1
+        env:
+          MYSQL_DATABASE: "cheap_delivery_adm_test"
+          MYSQL_ROOT_PASSWORD: "root"
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       - name: Checkout
@@ -39,13 +48,18 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
+          extensions: pdo, pdo_mysql
 
       - name: Install dependencies
         run: composer update --no-progress --optimize-autoloader
 
-      - name: Start MySQL
+      - name: Wait for database
         run: |
-          sudo /etc/init.d/mysql start
+          until nc -z -v -w30 mysql 3306
+          do
+            echo "Waiting for connection..."
+            sleep 5
+          done
 
       - name: Run database migrations
         run: |
