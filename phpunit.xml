@@ -33,6 +33,8 @@
     </source>
 
     <php>
+        <env name="CHEAP_DELIVERY_HOST" value="cheap-delivery.localhost"/>
+
         <env name="MYSQL_DATABASE_HOST" value="cheap-delivery-adm"/>
         <env name="MYSQL_DATABASE_PORT" value="3306"/>
         <env name="MYSQL_DATABASE_NAME" value="cheap_delivery_adm_test"/>

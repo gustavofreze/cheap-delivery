@@ -17,7 +17,7 @@ final readonly class DispatchWithLowestCost implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $payload = json_decode($request->getBody()->__toString(), true);
+        $payload = (array)json_decode($request->getBody()->__toString(), true);
         $request = new Request(payload: $payload);
         $command = $request->toCommand();
 

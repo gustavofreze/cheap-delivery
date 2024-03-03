@@ -20,6 +20,6 @@ final readonly class LinearCostFactory implements CostModalityFactory
 
     public function build(): CostModality
     {
-        return new LinearCost(variableCost: new Cost(value: floatval($this->costModality['cost'])));
+        return new LinearCost(variableCost: new Cost(value: (float)$this->costModality['cost']));
     }
 }

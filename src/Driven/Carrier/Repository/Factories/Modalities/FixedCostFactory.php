@@ -20,6 +20,6 @@ final readonly class FixedCostFactory implements CostModalityFactory
 
     public function build(): CostModality
     {
-        return new FixedCost(fixedCost: new Cost(value: floatval($this->costModality['cost'])));
+        return new FixedCost(fixedCost: new Cost(value: (float)$this->costModality['cost']));
     }
 }

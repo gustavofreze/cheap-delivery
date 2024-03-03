@@ -12,11 +12,11 @@ final readonly class EventRecordFactory
 {
     public static function from(Event $event): EventRecord
     {
-        $record = match (get_class($event)) {
-            DispatchedWithLowestCost::class => new DispatchedWithLowestCostV1(event: $event),
-            default => throw new LogicException(message: 'Unsupported event type. Cannot convert event to EventRecord.')
-        };
+        if ($event::class === DispatchedWithLowestCost::class) {
+            return (new DispatchedWithLowestCostV1(event: $event))->build();
+        }
 
-        return $record->build();
+        $template = 'Event <%s> is not supported. Unable to create an EventRecord.';
+        throw new LogicException(message: sprintf($template, $event::class));
     }
 }

@@ -15,18 +15,18 @@ final readonly class DispatchWithLowestCostHandler implements CommandHandler
     {
     }
 
-    /**
-     * @param DispatchWithLowestCost $command
-     * @return void
-     */
-    public function handle(Command $command): void
+    public function handle(Command|DispatchWithLowestCost $command): void
     {
         $carriers = $this->carriers->findAll();
 
+        /** @var DispatchWithLowestCost $command */
+        $person = $command->person;
+        $product = $command->product;
+
         $dispatch = Dispatch::create();
         $dispatch->dispatchWithLowestCost(
-            weight: $command->product->weight,
-            distance: $command->person->distance,
+            weight: $product->weight,
+            distance: $person->distance,
             carriers: $carriers
         );
 

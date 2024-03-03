@@ -4,7 +4,6 @@ namespace CheapDelivery\Application\Domain\Models\Commons;
 
 use Closure;
 use Generator;
-use Traversable;
 
 /**
  * @implements Collectible<mixed, mixed>
@@ -21,7 +20,7 @@ class Collection implements Collectible
      */
     public function __construct(iterable $elements = [])
     {
-        $this->elements = $this->normalize(elements: $elements);
+        $this->elements = iterator_to_array($elements);
     }
 
     public function add(mixed $element): Collectible
@@ -80,17 +79,5 @@ class Collection implements Collectible
         foreach ($this->elements as $element) {
             yield $element;
         }
-    }
-
-    /**
-     * @param mixed[] $elements
-     * @return mixed[]
-     */
-    private function normalize(iterable $elements): array
-    {
-        return match (true) {
-            $elements instanceof Traversable => iterator_to_array($elements),
-            default => $elements
-        };
     }
 }

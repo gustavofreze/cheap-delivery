@@ -2,8 +2,8 @@
 
 namespace CheapDelivery\Query\Dispatch;
 
+use CheapDelivery\Factories\Request;
 use CheapDelivery\Query\Dispatch\Database\Facade;
-use CheapDelivery\Query\Dispatch\Factories\Request;
 use CheapDelivery\Query\QueryBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -14,7 +14,7 @@ class ResourceTest extends TestCase
 {
     private Resource $resource;
 
-    private QueryBuilder|MockObject $queryBuilder;
+    private MockObject $queryBuilder;
 
     protected function setUp(): void
     {

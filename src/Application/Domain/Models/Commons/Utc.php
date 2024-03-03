@@ -20,6 +20,7 @@ final readonly class Utc
         $dateTime = new DateTimeImmutable(datetime: 'now', timezone: $timezone);
         $formattedDate = $dateTime->format(format: self::FORMAT_RFC3339);
 
+        /** @var DateTimeImmutable $utc */
         $utc = DateTimeImmutable::createFromFormat(
             format: self::FORMAT_RFC3339,
             datetime: $formattedDate,

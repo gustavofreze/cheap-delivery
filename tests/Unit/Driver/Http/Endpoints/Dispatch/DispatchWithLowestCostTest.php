@@ -2,8 +2,8 @@
 
 namespace CheapDelivery\Driver\Http\Endpoints\Dispatch;
 
-use CheapDelivery\Driver\Http\Endpoints\Dispatch\Factories\Request;
 use CheapDelivery\Driver\Http\Endpoints\Dispatch\Mocks\DispatchWithLowestCostHandlerMock;
+use CheapDelivery\Factories\Request;
 use PHPUnit\Framework\TestCase;
 use TinyBlocks\Http\HttpCode;
 

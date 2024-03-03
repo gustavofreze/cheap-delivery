@@ -14,11 +14,6 @@ final readonly class Facade implements Query
     {
     }
 
-    /**
-     * @param DispatchFilters|Filters $filters
-     * @return mixed[]
-     * @throws QueryFailure
-     */
     public function findAll(DispatchFilters|Filters $filters): array
     {
         try {

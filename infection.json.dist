@@ -19,11 +19,8 @@
         "BCMath": false,
         "CastInt": false,
         "CastFloat": false,
-        "ArrayItem": false,
+        "CastArray": false,
         "CastString": false,
-        "InstanceOf_": false,
-        "MatchArmRemoval": false,
-        "ArrayItemRemoval": false,
         "PublicVisibility": false,
         "MethodCallRemoval": false,
         "NullSafePropertyCall": false

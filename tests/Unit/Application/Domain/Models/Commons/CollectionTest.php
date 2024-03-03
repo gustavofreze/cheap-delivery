@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 class CollectionTest extends TestCase
 {
     /**
-     * @param iterable $elements
+     * @param mixed[] $elements
      * @param array $expected
      * @return void
      * @dataProvider itemsProvider

@@ -28,8 +28,8 @@ class DispatchTest extends TestCase
         $actual = $dispatch->dispatchWithLowestCost(weight: $weight, distance: $distance, carriers: $carriers);
 
         /** @Then the value should be the same as expected */
-        self::assertEquals($expected->cost, $actual->shipment->cost);
-        self::assertEquals($expected->carrierName, $actual->shipment->carrierName);
+        self::assertEquals($expected->cost, $actual->shipment?->cost);
+        self::assertEquals($expected->carrierName, $actual->shipment?->carrierName);
         self::assertNotEmpty($actual->id->getValue());
     }
 

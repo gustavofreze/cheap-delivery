@@ -43,8 +43,8 @@ class DispatchWithLowestCostHandlerTest extends IntegrationTestCapabilities
         /** @Then the dispatch should be persisted */
         $actual = $this->query->findLastDispatch();
 
-        self::assertEquals(96.4, $actual->shipment->cost->value);
-        self::assertEquals('DHL', $actual->shipment->carrierName->value);
+        self::assertEquals(96.4, $actual->shipment?->cost->value);
+        self::assertEquals('DHL', $actual->shipment?->carrierName->value);
 
         /** @And a new event will be inserted into the outbox table */
         $event = $this->query->findEventBy(aggregateId: $actual->id, eventType: 'DispatchedWithLowestCost');

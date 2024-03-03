@@ -13,11 +13,11 @@ use RuntimeException;
 
 final class MySqlQueryBuilderTest extends TestCase
 {
-    private Result|MockObject $result;
+    private MockObject $result;
 
-    private Statement|MockObject $statement;
+    private MockObject $statement;
 
-    private Connection|MockObject $connection;
+    private MockObject $connection;
 
     private MySqlQueryBuilder $queryBuilder;
 

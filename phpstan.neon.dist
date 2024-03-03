@@ -3,10 +3,9 @@ parameters:
     - src
   level: 9
   tmpDir: report/phpstan
-  excludePaths:
-    - src/Application/Domain/Models/Commons/Utc.php
   ignoreErrors:
-    - '#No value type specified in iterable type#'
+    - '#expects string\|null, mixed given#'
     - '#with no value type specified in iterable type array#'
-    - '#expects array, mixed given#'
+    - '#expects class-string<T of object>\|T of object, string given#'
+    - '#return type has no value type specified in iterable type array#'
   reportUnmatchedIgnoredErrors: false

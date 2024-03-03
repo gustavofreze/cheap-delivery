@@ -4,10 +4,6 @@ namespace CheapDelivery\Query\Dispatch\Database;
 
 final class Builder
 {
-    /**
-     * @param array $dispatches
-     * @return mixed[]
-     */
     public static function from(array $dispatches): array
     {
         $mapper = fn(array $dispatch) => [

@@ -19,7 +19,7 @@ final readonly class Record
 
     public function toCarrier(): Carrier
     {
-        $costModality = json_decode($this->value['costModality'], true);
+        $costModality = (array)json_decode($this->value['costModality'], true);
 
         return new Carrier(
             name: new Name(value: $this->value['name']),

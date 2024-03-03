@@ -2,10 +2,10 @@
 
 namespace CheapDelivery\Driver\Http\Endpoints\Dispatch;
 
-use CheapDelivery\Driver\Http\Endpoints\Dispatch\Factories\Request;
 use CheapDelivery\Driver\Http\Endpoints\Dispatch\Mocks\DispatchWithLowestCostHandlerMock;
 use CheapDelivery\Driver\Http\Endpoints\Dispatch\Mocks\Exceptions;
 use CheapDelivery\Driver\Http\Middlewares\ErrorHandling;
+use CheapDelivery\Factories\Request;
 use PHPUnit\Framework\TestCase;
 use TinyBlocks\Http\HttpCode;
 
