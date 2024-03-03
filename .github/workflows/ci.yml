@@ -62,9 +62,10 @@ jobs:
         run: docker network connect cheap-delivery_default cheap-delivery-adm || true
 
       - name: Run database migrations
-        run: docker run --rm -v ${PWD}/db/mysql/migrations:/flyway/sql \
-          --env-file=config/local.env --link cheap-delivery-adm flyway/flyway:10.8.1 \
-          -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm_test migrate
+        run: |
+          docker run --rm -v ${PWD}/db/mysql/migrations:/flyway/sql \
+            --env-file=config/local.env --link cheap-delivery-adm flyway/flyway:10.8.1 \
+            -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm_test migrate
 
       - name: Run tests
         env:
