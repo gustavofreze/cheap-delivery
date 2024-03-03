@@ -55,7 +55,7 @@ jobs:
 
       - name: Wait for database
         run: |
-          until nc -z -v -w30 mysql 3306
+          until nc -z -v -w30 cheap-delivery-adm 3306
           do
             echo "Waiting for connection..."
             sleep 5
