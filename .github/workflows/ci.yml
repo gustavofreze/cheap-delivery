@@ -64,7 +64,8 @@ jobs:
       - name: Run database migrations
         run: |
           docker run --rm -v ${PWD}/db/mysql/migrations:/flyway/sql \
-            --env-file=config/local.env flyway/flyway:10.8.1 \
+            --env-file=config/local.env -e FLYWAY_URL=jdbc:mysql://127.0.0.1:3306?useUnicode=yes&characterEncoding=UTF-8 \
+            flyway/flyway:10.8.1 \
             -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm_test migrate
 
       - name: Run tests
