@@ -4,7 +4,7 @@ DOCKER_EXEC = docker exec -it cheap-delivery
 
 INTEGRATION_TEST = docker run -u root --rm -it --name cheap-delivery-integration-test --link cheap-delivery-adm --network=cheap-delivery_default -v ${PWD}:/app -w /app ${IMAGE}
 
-FLYWAY = docker run --rm -v ${PWD}/db/mysql/migrations:/flyway/sql --env-file=config/local.env --link cheap-delivery-adm --network=cheap-delivery_default -e FLYWAY_EDITION="community" flyway/flyway:10.8.1
+FLYWAY = docker run --rm -v ${PWD}/db/mysql/migrations:/flyway/sql --env-file=config/local.env --link cheap-delivery-adm --network=cheap-delivery_default flyway/flyway:10.8.1
 MIGRATE_DB = ${FLYWAY} -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm
 MIGRATE_TEST_DB = ${FLYWAY} -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm_test
 
