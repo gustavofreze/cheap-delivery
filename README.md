@@ -7,7 +7,8 @@
     - [Queries](#queries)
 * [Installation](#installation)
     - [Repository](#repository)
-    - [Configuration](#settings)
+    - [Configuration](#configuration)
+    - [Tests](#tests)
 * [Environment setup](#environment_setup)
 
 <div id="overview"></div> 
@@ -52,9 +53,9 @@ To clone the repository using the command line, run:
 git clone https://github.com/gustavofreze/cheap-delivery.git
 ```
 
-<div id='settings'></div> 
+<div id='configuration'></div> 
 
-### Configuração
+### Configuration
 
 To install project dependencies locally, run:
 
@@ -66,6 +67,28 @@ To start the application containers, run:
 
 ```bash
 make start
+```
+
+<div id='tests'></div> 
+
+### Tests
+
+Run only unit tests:
+
+```bash
+make test-unit
+```
+
+Run only integration tests:
+
+```bash
+make test-integration
+```
+
+Run all tests:
+
+```bash
+make test 
 ```
 
 <div id='environment_setup'></div> 
