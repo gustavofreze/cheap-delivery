@@ -10,14 +10,14 @@
 
 **Request**
 
-| Parâmetro         |  Tipo  | Descrição             | Obrigatório |
-|:------------------|:------:|:----------------------|:-----------:|
-| `person`          | Object | Recipient's data      |     Yes     |    
-| `person.name`     | String | Recipient's name.     |     Yes     |    
-| `person.distance` | Float  | Recipient's distance. |     Yes     |    
-| `product`         | Object | Product's data.       |     Yes     |    
-| `product.name`    | String | Product's name.       |     Yes     |    
-| `product.weight`  | Float  | Product's weight.     |     Yes     |    
+| Parameter         |  Type  | Description           | Required |
+|:------------------|:------:|:----------------------|:--------:|
+| `person`          | Object | Recipient's data.     |   Yes    |    
+| `person.name`     | String | Recipient's name.     |   Yes    |    
+| `person.distance` | Float  | Recipient's distance. |   Yes    |    
+| `product`         | Object | Product's data.       |   Yes    |    
+| `product.name`    | String | Product's name.       |   Yes    |    
+| `product.weight`  | Float  | Product's weight.     |   Yes    |
 
 ```json
 {

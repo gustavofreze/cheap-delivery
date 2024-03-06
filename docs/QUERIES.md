@@ -10,9 +10,9 @@
 
 **Request**
 
-| Parâmetro     |  Tipo  | Descrição     | Obrigatório |
-|:--------------|:------:|:--------------|:-----------:|
-| `carrierName` | String | Carrier name. |     No      |    
+| Parameter     |  Type  | Description   | Required |
+|:--------------|:------:|:--------------|:--------:|
+| `carrierName` | String | Carrier name. |    No    |
 
 **Response**
 
