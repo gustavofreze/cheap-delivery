@@ -25,7 +25,14 @@ final class Request
         $body = new Stream(stream: $stream);
         $headers = new Headers(headers: ['Content-Type' => 'application/json']);
 
-        return new SlimRequest(method: 'GET', uri: $uri, headers: $headers, cookies: [], serverParams: [], body: $body);
+        return new SlimRequest(
+            method: 'GET',
+            uri: $uri,
+            headers: $headers,
+            cookies: [],
+            serverParams: [],
+            body: $body
+        );
     }
 
     public static function postFrom(array $payload): ServerRequestInterface
@@ -47,6 +54,13 @@ final class Request
         $body = new Stream(stream: $stream);
         $headers = new Headers(headers: ['Content-Type' => 'application/json']);
 
-        return new SlimRequest(method: 'GET', uri: $uri, headers: $headers, cookies: [], serverParams: [], body: $body);
+        return new SlimRequest(
+            method: 'POST',
+            uri: $uri,
+            headers: $headers,
+            cookies: [],
+            serverParams: [],
+            body: $body
+        );
     }
 }

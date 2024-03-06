@@ -8,10 +8,10 @@ FLYWAY = docker run --rm -v ${PWD}/db/mysql/migrations:/flyway/sql --env-file=co
 MIGRATE_DB = ${FLYWAY} -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm
 MIGRATE_TEST_DB = ${FLYWAY} -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm_test
 
-configure:
+start:
 	@docker-compose up -d --build
 
-configure-local:
+configure:
 	@${DOCKER_RUN} composer update --optimize-autoloader
 
 test: migrate-test-database
