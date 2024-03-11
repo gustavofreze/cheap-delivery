@@ -9,6 +9,7 @@
     - [Repository](#repository)
     - [Configuration](#configuration)
     - [Tests](#tests)
+    - [Review](#review)
 * [Environment setup](#environment_setup)
 
 <div id="overview"></div> 
@@ -95,6 +96,16 @@ Displays coverage reports in the browser:
 
 ```bash
 make show-coverage 
+```
+
+<div id='review'></div> 
+
+### Review
+
+Run static code analysis:
+
+```bash
+make review 
 ```
 
 <div id='environment_setup'></div> 
