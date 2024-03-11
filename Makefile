@@ -23,6 +23,9 @@ test-no-coverage: migrate-test-database
 test-unit:
 	@${DOCKER_RUN} composer run test-unit
 
+test-unit-file:
+	@${DOCKER_RUN} composer run test-unit-specifying-file ${FILE}
+
 test-integration: migrate-test-database
 	@${INTEGRATION_TEST} composer run test-integration
 

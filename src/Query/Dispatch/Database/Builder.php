@@ -8,7 +8,7 @@ final class Builder
     {
         $mapper = fn(array $dispatch) => [
             'id'        => $dispatch['id'],
-            'cost'      => floatval($dispatch['cost']),
+            'cost'      => (float)$dispatch['cost'],
             'carrier'   => [
                 'name' => $dispatch['carrierName']
             ],
