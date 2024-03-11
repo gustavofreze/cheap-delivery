@@ -76,19 +76,25 @@ make start
 Run only unit tests:
 
 ```bash
-make test-unit
+make unit-test
 ```
 
 Run only integration tests:
 
 ```bash
-make test-integration
+make integration-test
 ```
 
 Run all tests:
 
 ```bash
 make test 
+```
+
+Displays coverage reports in the browser:
+
+```bash
+make show-coverage 
 ```
 
 <div id='environment_setup'></div> 

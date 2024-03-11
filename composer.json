@@ -46,11 +46,9 @@
         "phpmd": "phpmd ./src text phpmd.xml --suffixes php --exclude --ignore-violations-on-exit",
         "phpstan": "phpstan analyse -c phpstan.neon.dist --quiet --no-progress",
         "fix-style": "phpcbf ./src --extensions=php",
-        "test-unit": "phpunit -c phpunit.xml --no-coverage --testsuite unit",
-        "test-mutation": "infection --only-covered --logger-html=report/coverage/mutation-report.html --coverage=report/coverage --min-msi=100 --min-covered-msi=100 --threads=4",
-        "test-no-coverage": "phpunit -c phpunit.xml --no-coverage --testsuite all",
-        "test-integration": "phpunit -c phpunit.xml --no-coverage --testsuite integration",
-        "test-unit-specifying-file": "phpunit -c phpunit.xml --no-coverage --testsuite unit",
+        "unit-test": "phpunit -c phpunit.xml --no-coverage --testsuite unit",
+        "mutation-test": "infection --only-covered --logger-html=report/coverage/mutation-report.html --coverage=report/coverage --min-msi=100 --min-covered-msi=100 --threads=4",
+        "integration-test": "phpunit -c phpunit.xml --no-coverage --testsuite integration",
         "review": [
             "@phpcs",
             "@phpmd",
@@ -58,7 +56,7 @@
         ],
         "tests": [
             "@test",
-            "@test-mutation"
+            "@mutation-test"
         ]
     }
 }

@@ -1,12 +1,13 @@
-IMAGE = gustavofreze/php:8.2
-DOCKER_RUN = docker run -u root --rm -it --net=host -v ${PWD}:/app -w /app ${IMAGE}
+PHP_IMAGE = gustavofreze/php:8.2
+DOCKER_RUN = docker run -u root --rm -it --net=host -v ${PWD}:/app -w /app ${PHP_IMAGE}
 DOCKER_EXEC = docker exec -it cheap-delivery
 
-INTEGRATION_TEST = docker run -u root --rm -it --name cheap-delivery-integration-test --link cheap-delivery-adm --network=cheap-delivery_default -v ${PWD}:/app -w /app ${IMAGE}
+INTEGRATION_TEST = docker run -u root --rm -it --name cheap-delivery-integration-test --link cheap-delivery-adm --network=cheap-delivery_default -v ${PWD}:/app -w /app ${PHP_IMAGE}
 
-FLYWAY = docker run --rm -v ${PWD}/db/mysql/migrations:/flyway/sql --env-file=config/local.env --link cheap-delivery-adm --network=cheap-delivery_default flyway/flyway:10.8.1
-MIGRATE_DB = ${FLYWAY} -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm
-MIGRATE_TEST_DB = ${FLYWAY} -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm_test
+FLYWAY_IMAGE = flyway/flyway:10.9.1
+FLYWAY_RUN = docker run --rm -v ${PWD}/db/mysql/migrations:/flyway/sql --env-file=config/local.env --link cheap-delivery-adm --network=cheap-delivery_default ${FLYWAY_IMAGE}
+MIGRATE_DB = ${FLYWAY_RUN} -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm
+MIGRATE_TEST_DB = ${FLYWAY_RUN} -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm_test
 
 start:
 	@docker-compose up -d --build
@@ -17,17 +18,11 @@ configure:
 test: migrate-test-database
 	@${INTEGRATION_TEST} composer run tests
 
-test-no-coverage: migrate-test-database
-	@${INTEGRATION_TEST} composer run test-no-coverage
+unit-test:
+	@${DOCKER_RUN} composer run unit-test
 
-test-unit:
-	@${DOCKER_RUN} composer run test-unit
-
-test-unit-file:
-	@${DOCKER_RUN} composer run test-unit-specifying-file ${FILE}
-
-test-integration: migrate-test-database
-	@${INTEGRATION_TEST} composer run test-integration
+integration-test: migrate-test-database
+	@${INTEGRATION_TEST} composer run integration-test
 
 review:
 	@${DOCKER_RUN} composer review

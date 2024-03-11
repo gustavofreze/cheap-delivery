@@ -6,7 +6,7 @@ LABEL author="Gustavo Freze" \
       org.label-schema.vcs-url="https://github.com/gustavofreze/cheap-delivery/blob/main/Dockerfile" \
       org.label-schema.schema-version="1.0"
 
-ARG FLYWAY_VERSION=10.8.1
+ARG FLYWAY_VERSION=10.9.1
 
 RUN apk --no-cache add tar curl mysql-client openjdk21-jre \
     && mkdir -p /opt/flyway \
