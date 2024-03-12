@@ -108,7 +108,7 @@ Run static code analysis:
 make review 
 ```
 
-<div id='environment_setup'></div> 
+> You can check other available commands by running `make help`.
 
 ## Environment Setup
 
