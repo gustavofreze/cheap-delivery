@@ -49,3 +49,16 @@
     ```json
     []
     ```
+
+- `500 Internal Server Error`
+
+  **Description**: Indicates that an unexpected error occurred on the server while processing the request.
+
+  **Content-Type**: application/json
+
+  **Body**:
+    ```json
+    {
+        "error": "An internal server error occurred."
+    }
+    ```

@@ -12,7 +12,7 @@ MIGRATE_TEST_DB := ${FLYWAY_RUN} -locations=filesystem:/flyway/sql -schemas=chea
 
 .PHONY: start configure test unit-test integration-test review fix-style show-coverage clean migrate-database clean-database migrate-test-database help
 
-start: ## Start Docker Compose services
+start: ## Start Docker compose services
 	@docker-compose up -d --build
 
 configure: ## Configure development environment
