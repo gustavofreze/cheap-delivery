@@ -1,6 +1,6 @@
 {
     "name": "gustavofreze/cheap-delivery",
-    "description": "POC de uma aplicação de domínio logístico.",
+    "description": "POC for a logistics domain application.",
     "type": "project",
     "license": "MIT",
     "minimum-stability": "stable",
@@ -19,7 +19,7 @@
     "require": {
         "php": "^8.2",
         "slim/psr7": "^1.6",
-        "slim/slim": "^4.12",
+        "slim/slim": "^4.13",
         "doctrine/dbal": "^3.8",
         "tiny-blocks/http": "^3.1",
         "php-di/slim-bridge": "^3.4",

@@ -3,7 +3,7 @@ PHP_IMAGE := gustavofreze/php:8.2
 APP_RUN := docker run -u root --rm -it --network=host -v ${PWD}:/app -w /app ${PHP_IMAGE}
 APP_TEST_RUN := docker run -u root --rm -it --name cheap-delivery-integration-test --link cheap-delivery-adm --network=cheap-delivery_default -v ${PWD}:/app -w /app ${PHP_IMAGE}
 
-FLYWAY_IMAGE := flyway/flyway:10.9.1
+FLYWAY_IMAGE := flyway/flyway:10.10.0
 FLYWAY_RUN := docker run --rm -v ${PWD}/db/mysql/migrations:/flyway/sql --env-file=config/local.env --link cheap-delivery-adm --network=cheap-delivery_default ${FLYWAY_IMAGE}
 MIGRATE_DB := ${FLYWAY_RUN} -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm
 MIGRATE_TEST_DB := ${FLYWAY_RUN} -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm_test
