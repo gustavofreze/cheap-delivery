@@ -1,13 +1,11 @@
 <?php
 
-use CheapDelivery\Starter\Dependencies;
-use CheapDelivery\Starter\Routes;
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use CheapDelivery\Dependencies;
+use CheapDelivery\Routes;
 use DI\Bridge\Slim\Bridge;
 use DI\ContainerBuilder;
-
-require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . '/../src/Starter/Dependencies.php';
-require_once __DIR__ . '/../src/Starter/Routes.php';
 
 $containerBuilder = new ContainerBuilder();
 $containerBuilder->addDefinitions(Dependencies::definitions());

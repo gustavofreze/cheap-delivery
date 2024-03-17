@@ -1,0 +1,14 @@
+<?php
+
+namespace CheapDelivery\Driven\Carrier\Repository\Factories\Exceptions;
+
+use LogicException;
+
+final class UnknownCondition extends LogicException
+{
+    public function __construct(string $invalid)
+    {
+        $template = 'Unknown <%s> condition.';
+        parent::__construct(message: sprintf($template, $invalid));
+    }
+}

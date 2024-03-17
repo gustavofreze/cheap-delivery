@@ -1,13 +1,10 @@
 {
     "name": "gustavofreze/cheap-delivery",
-    "description": "POC de uma aplicação de domínio logístico.",
+    "description": "POC for a logistics domain application.",
     "type": "project",
     "license": "MIT",
     "minimum-stability": "stable",
     "prefer-stable": true,
-    "config": {
-        "sort-packages": true
-    },
     "autoload": {
         "psr-4": {
             "CheapDelivery\\": "src/"
@@ -15,41 +12,51 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "CheapDelivery\\": "tests/"
+            "Test\\": "tests/",
+            "CheapDelivery\\": "tests/Unit/"
         }
     },
     "require": {
-        "php": "^8.1||^8.2",
+        "php": "^8.2",
         "slim/psr7": "^1.6",
-        "slim/slim": "4.11.0",
-        "respect/validation": "^2.2",
-        "php-di/slim-bridge": "^3.3",
-        "tiny-blocks/http": "^2.1",
-        "tiny-blocks/serializer": "^2.0",
-        "mongodb/mongodb": "1.*",
-        "ext-mongodb": "*",
-        "ext-pdo": "*"
+        "slim/slim": "^4.13",
+        "doctrine/dbal": "^3.8",
+        "tiny-blocks/http": "^3.1",
+        "php-di/slim-bridge": "^3.4",
+        "ext-pdo": "*",
+        "ext-bcmath": "*"
     },
     "require-dev": {
-        "phpmd/phpmd": "^2.13",
-        "phpunit/phpunit": "^9.6",
-        "squizlabs/php_codesniffer": "^3.7",
-        "dg/bypass-finals": "^1.4"
+        "phpmd/phpmd": "^2.15",
+        "phpstan/phpstan": "^1.10",
+        "phpunit/phpunit": "^10.5",
+        "infection/infection": "^0.27",
+        "squizlabs/php_codesniffer": "^3.9",
+        "dg/bypass-finals": "^1.6"
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "infection/extension-installer": true
+        }
     },
     "scripts": {
+        "test": "phpunit -c phpunit.xml --log-junit=report/coverage/junit.xml --coverage-xml=report/coverage/coverage-xml --coverage-html=report/coverage/coverage-html tests",
         "phpcs": "phpcs --standard=PSR12 --extensions=php ./src",
         "phpmd": "phpmd ./src text phpmd.xml --suffixes php --exclude --ignore-violations-on-exit",
-        "test": "phpunit --log-junit=report/coverage/junit.xml --coverage-xml=report/coverage/coverage-xml --coverage-html=report/coverage/coverage-html tests",
-        "test-no-coverage": "phpunit --no-coverage",
+        "phpstan": "phpstan analyse -c phpstan.neon.dist --quiet --no-progress",
+        "fix-style": "phpcbf ./src --extensions=php",
+        "unit-test": "phpunit -c phpunit.xml --no-coverage --testsuite unit",
+        "mutation-test": "infection --only-covered --logger-html=report/coverage/mutation-report.html --coverage=report/coverage --min-msi=100 --min-covered-msi=100 --threads=4",
+        "integration-test": "phpunit -c phpunit.xml --no-coverage --testsuite integration",
         "review": [
             "@phpcs",
-            "@phpmd"
+            "@phpmd",
+            "@phpstan"
         ],
         "tests": [
-            "@test"
-        ],
-        "tests-no-coverage": [
-            "@test-no-coverage"
+            "@test",
+            "@mutation-test"
         ]
     }
 }

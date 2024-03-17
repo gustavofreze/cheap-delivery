@@ -1,31 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         bootstrap="tests/bootstrap.php"
-         cacheResultFile="report/.phpunit.result.cache"
-         backupGlobals="false"
-         backupStaticAttributes="false"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
          colors="true"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         processIsolation="false"
+         bootstrap="tests/bootstrap.php"
+         backupGlobals="false"
          stopOnFailure="false"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+         executionOrder="default"
+         cacheResultFile="report/.phpunit.result.cache"
+         processIsolation="false"
+         backupStaticProperties="false">
+
     <testsuites>
-        <testsuite name="default">
+        <testsuite name="all">
             <directory suffix="Test.php">tests</directory>
+        </testsuite>
+        <testsuite name="unit">
+            <directory suffix="Test.php">tests/Unit</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory suffix="Test.php">tests/Integration</directory>
         </testsuite>
     </testsuites>
 
-    <coverage>
+    <source>
         <include>
-            <directory suffix=".php">src/Core</directory>
-            <directory suffix=".php">src/Driven/Carrier</directory>
-            <directory suffix=".php">src/Driven/Environment</directory>
+            <directory suffix=".php">src</directory>
         </include>
-    </coverage>
+        <exclude>
+            <file>src/Routes.php</file>
+            <file>src/Dependencies.php</file>
+        </exclude>
+    </source>
 
     <php>
-        <env name="XPTO" value="xxxxxxxxxx"/>
+        <env name="CHEAP_DELIVERY_HOST" value="cheap-delivery.localhost"/>
+
+        <env name="MYSQL_DATABASE_HOST" value="cheap-delivery-adm"/>
+        <env name="MYSQL_DATABASE_PORT" value="3306"/>
+        <env name="MYSQL_DATABASE_NAME" value="cheap_delivery_adm_test"/>
+        <env name="MYSQL_DATABASE_USER" value="root"/>
+        <env name="MYSQL_DATABASE_PASSWORD" value="root"/>
     </php>
+
 </phpunit>

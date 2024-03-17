@@ -1,0 +1,11 @@
+parameters:
+  paths:
+    - src
+  level: 9
+  tmpDir: report/phpstan
+  ignoreErrors:
+    - '#expects string\|null, mixed given#'
+    - '#with no value type specified in iterable type array#'
+    - '#expects class-string<T of object>\|T of object, string given#'
+    - '#return type has no value type specified in iterable type array#'
+  reportUnmatchedIgnoredErrors: false
