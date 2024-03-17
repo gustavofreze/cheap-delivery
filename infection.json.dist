@@ -1,0 +1,29 @@
+{
+    "$schema": "vendor/infection/infection/resources/schema.json",
+    "tmpDir": "report/",
+    "logs": {
+        "text": "report/logs/infection-text.log",
+        "summary": "report/logs/infection-summary.log"
+    },
+    "source": {
+        "directories": [
+            "src"
+        ],
+        "excludes": [
+            "src/Application/Domain/Models/Commons/Uuid.php"
+        ]
+    },
+    "timeout": 10,
+    "mutators": {
+        "@default": true,
+        "BCMath": false,
+        "CastInt": false,
+        "CastFloat": false,
+        "CastArray": false,
+        "CastString": false,
+        "PublicVisibility": false,
+        "MethodCallRemoval": false,
+        "NullSafePropertyCall": false
+    },
+    "testFramework": "phpunit"
+}

@@ -1,5 +1,6 @@
 .idea
+
 /vendor/
 /report
-composer.lock
-.phpunit.result.cache
+*.lock
+.phpunit.*
