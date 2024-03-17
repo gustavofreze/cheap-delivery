@@ -4,6 +4,7 @@ namespace CheapDelivery\Driver\Http\Endpoints\Dispatch;
 
 use CheapDelivery\Application\Domain\Exceptions\DistanceOutOfRange;
 use CheapDelivery\Application\Domain\Exceptions\EmptyName;
+use CheapDelivery\Application\Domain\Exceptions\NameTooLong;
 use CheapDelivery\Application\Domain\Exceptions\NoCarriersAvailable;
 use CheapDelivery\Application\Domain\Exceptions\NoEligibleCarriers;
 use CheapDelivery\Application\Domain\Exceptions\NonPositiveValue;
@@ -21,6 +22,7 @@ final class DispatchExceptionHandler implements ExceptionHandler
 
         return match (get_class($exception)) {
             EmptyName::class,
+            NameTooLong::class,
             NonPositiveValue::class,
             WeightOutOfRange::class,
             DistanceOutOfRange::class => HttpResponse::unprocessableEntity(data: $error),

@@ -185,6 +185,33 @@ class DispatchExceptionHandlerTest extends TestCase
         self::assertEquals(json_encode($expected), $actual->getBody()->__toString());
     }
 
+    public function testExceptionWhenNameTooLong(): void
+    {
+        /** @Given that I have the data to calculate the dispatch with the lowest cost */
+        $payload = [
+            'person'  => [
+                'name'     => str_repeat('x', 256),
+                'distance' => 800.00
+            ],
+            'product' => [
+                'name'   => 'MacBook Pro',
+                'weight' => 2.16
+            ]
+        ];
+
+        /** @And that I use this data in the request */
+        $request = Request::postFrom(payload: $payload);
+
+        /** @When I process the request with this handler */
+        $actual = $this->middleware->process(request: $request, handler: $this->endpoint);
+
+        /** @Then the response should be an error indicating name is too long */
+        $expected = ['error' => 'Name is too long. Current <256> characters, Maximum <255> characters.'];
+
+        self::assertEquals(HttpCode::UNPROCESSABLE_ENTITY->value, $actual->getStatusCode());
+        self::assertEquals(json_encode($expected), $actual->getBody()->__toString());
+    }
+
     public function testExceptionWhenUnknownError(): void
     {
         /** @Given that I have the data to calculate the dispatch with the lowest cost */
