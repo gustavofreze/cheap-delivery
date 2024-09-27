@@ -11,7 +11,7 @@ use CheapDelivery\Application\Domain\Models\DispatchId;
 use CheapDelivery\Application\Domain\Models\Name;
 use CheapDelivery\Application\Domain\Models\Shipment;
 use CheapDelivery\Driven\Shared\OutboxEvent\Commons\EventRecord;
-use DateTimeImmutable;
+use DateTimeInterface;
 use PHPUnit\Framework\TestCase;
 
 class DispatchedWithLowestCostV1Test extends TestCase
@@ -37,7 +37,7 @@ class DispatchedWithLowestCostV1Test extends TestCase
         /** @Then the data should be equal to the expected */
         $expectedPayload = json_encode([
             'id'       => $dispatch->id->value->toString(),
-            'instant'  => $instant->dateTime->format(DateTimeImmutable::RFC3339),
+            'instant'  => $instant->dateTime->format(DateTimeInterface::RFC3339),
             'dispatch' => [
                 'id'       => $dispatch->id->value->toString(),
                 'shipment' => [

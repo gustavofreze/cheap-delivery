@@ -5,7 +5,8 @@ namespace CheapDelivery\Driven\Shared\OutboxEvent;
 use CheapDelivery\Driven\Shared\Database\RelationalConnection;
 use CheapDelivery\Driven\Shared\OutboxEvent\Commons\EventRecord;
 use CheapDelivery\Driven\Shared\OutboxEvent\Commons\EventRecords;
-use DateTimeImmutable;
+use DateTimeInterface;
+use TinyBlocks\Collection\Collectible;
 
 final readonly class Adapter implements OutboxEvent
 {
@@ -13,9 +14,9 @@ final readonly class Adapter implements OutboxEvent
     {
     }
 
-    public function push(EventRecords $events): void
+    public function push(EventRecords|Collectible $events): void
     {
-        $events->each(callback: fn(EventRecord $record) => $this->connection
+        $events->each(actions: fn(EventRecord $record) => $this->connection
             ->with()
             ->query(sql: Queries::INSERT_EVENT)
             ->bind(data: [
@@ -24,7 +25,7 @@ final readonly class Adapter implements OutboxEvent
                 ':snapshot'      => $record->snapshot->toJson(),
                 ':revision'      => $record->revision->value,
                 ':eventType'     => $record->type,
-                ':occurredOn'    => $record->occurredOn->dateTime->format(DateTimeImmutable::RFC3339),
+                ':occurredOn'    => $record->occurredOn->dateTime->format(DateTimeInterface::RFC3339),
                 ':aggregateId'   => $record->aggregateId->getValue(),
                 ':aggregateType' => $record->aggregateType->value
             ])

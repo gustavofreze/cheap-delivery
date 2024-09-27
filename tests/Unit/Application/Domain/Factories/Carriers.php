@@ -13,26 +13,27 @@ use CheapDelivery\Application\Domain\Models\Modalities\LinearCost;
 use CheapDelivery\Application\Domain\Models\Modalities\PartialCost;
 use CheapDelivery\Application\Domain\Models\Name;
 use CheapDelivery\Application\Domain\Models\Weight;
+use TinyBlocks\Collection\Collectible;
 
 final class Carriers
 {
-    public static function available(): CarriersModel
+    public static function available(): Collectible|CarriersModel
     {
-        return new CarriersModel([
+        return CarriersModel::createFrom(elements: [
             Model::carrierFromDHL(),
             Model::carrierFromFedEx(),
             Model::carrierFromLoggi()
         ]);
     }
 
-    public static function unavailable(): CarriersModel
+    public static function unavailable(): Collectible|CarriersModel
     {
-        return new CarriersModel();
+        return CarriersModel::createFromEmpty();
     }
 
-    public static function noEligible(): CarriersModel
+    public static function noEligible(): Collectible|CarriersModel
     {
-        return new CarriersModel([
+        return CarriersModel::createFrom(elements: [
             new Carrier(
                 name: new Name(value: 'FedEx'),
                 costModality: new CompositeCost(

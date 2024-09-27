@@ -2,55 +2,54 @@
 
 namespace CheapDelivery\Application\Domain\Models\Commons;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class PositiveDecimalTest extends TestCase
 {
-    /**
-     * @param float $value
-     * @param float $other
-     * @param bool $expected
-     * @return void
-     * @dataProvider lessThanProvider
-     */
+    #[DataProvider('lessThanProvider')]
     public function testIsLessThan(float $value, float $other, bool $expected): void
     {
+        /** @Given a decimal value and another decimal to compare */
         $decimalValue = new PositiveDecimal(value: $value);
         $otherDecimalValue = new PositiveDecimal(value: $other);
 
-        self::assertEquals($expected, $decimalValue->isLessThan($otherDecimalValue));
+        /** @When I check if the first value is less than the second */
+        $actual = $decimalValue->isLessThan(other: $otherDecimalValue);
+
+        /** @Then the result should match the expected outcome */
+        self::assertEquals($expected, $actual);
     }
 
-    /**
-     * @param float $value
-     * @param float $other
-     * @param bool $expected
-     * @return void
-     * @dataProvider greaterThanOrEqualProvider
-     */
+    #[DataProvider('greaterThanOrEqualProvider')]
     public function testIsGreaterThanOrEqual(float $value, float $other, bool $expected): void
     {
+        /** @Given a decimal value and another decimal to compare */
         $decimalValue = new PositiveDecimal(value: $value);
         $otherDecimalValue = new PositiveDecimal(value: $other);
 
-        self::assertEquals($expected, $decimalValue->isGreaterThanOrEqual($otherDecimalValue));
+        /** @When I check if the first value is greater than or equal to the second */
+        $actual = $decimalValue->isGreaterThanOrEqual(other: $otherDecimalValue);
+
+        /** @Then the result should match the expected outcome */
+        self::assertEquals($expected, $actual);
     }
 
-    public static function lessThanProvider(): array
+    public static function lessThanProvider(): iterable
     {
-        return [
-            'value_less'    => ['value' => 5.5, 'other' => 4.5, 'expected' => false],
-            'value_equal'   => ['value' => 5.5, 'other' => 5.5, 'expected' => false],
-            'value_greater' => ['value' => 99.98, 'other' => 99.99, 'expected' => true]
-        ];
+        yield 'value equal to other' => [5.5, 5.5, false];
+
+        yield 'value less than other' => [5.5, 4.5, false];
+
+        yield 'value greater than other' => [99.98, 99.99, true];
     }
 
-    public static function greaterThanOrEqualProvider(): array
+    public static function greaterThanOrEqualProvider(): iterable
     {
-        return [
-            'value_less'    => ['value' => 5.5, 'other' => 4.5, 'expected' => true],
-            'value_equal'   => ['value' => 5.5, 'other' => 5.5, 'expected' => true],
-            'value_greater' => ['value' => 99.98, 'other' => 99.99, 'expected' => false]
-        ];
+        yield 'value equal to other' => [5.5, 5.5, true];
+
+        yield 'value less than other' => [99.98, 99.99, false];
+
+        yield 'value greater than other' => [5.5, 4.5, true];
     }
 }
