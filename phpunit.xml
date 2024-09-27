@@ -1,36 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
          colors="true"
-         bootstrap="tests/bootstrap.php"
-         backupGlobals="false"
-         stopOnFailure="false"
-         executionOrder="default"
-         cacheResultFile="report/.phpunit.result.cache"
-         processIsolation="false"
-         backupStaticProperties="false">
-
-    <testsuites>
-        <testsuite name="all">
-            <directory suffix="Test.php">tests</directory>
-        </testsuite>
-        <testsuite name="unit">
-            <directory suffix="Test.php">tests/Unit</directory>
-        </testsuite>
-        <testsuite name="integration">
-            <directory suffix="Test.php">tests/Integration</directory>
-        </testsuite>
-    </testsuites>
+         bootstrap="vendor/autoload.php"
+         failOnRisky="true"
+         failOnWarning="true"
+         cacheDirectory=".phpunit.cache"
+         beStrictAboutOutputDuringTests="true">
 
     <source>
         <include>
-            <directory suffix=".php">src</directory>
+            <directory>src</directory>
         </include>
         <exclude>
             <file>src/Routes.php</file>
             <file>src/Dependencies.php</file>
         </exclude>
     </source>
+
+    <testsuites>
+        <testsuite name="all">
+            <directory>tests</directory>
+        </testsuite>
+        <testsuite name="unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory>tests/Integration</directory>
+        </testsuite>
+    </testsuites>
+
+    <coverage>
+        <report>
+            <text outputFile="report/coverage.txt"/>
+            <html outputDirectory="report/html/"/>
+            <clover outputFile="report/coverage-clover.xml"/>
+        </report>
+    </coverage>
+
+    <logging>
+        <junit outputFile="report/execution-result.xml"/>
+    </logging>
 
     <php>
         <env name="CHEAP_DELIVERY_HOST" value="cheap-delivery.localhost"/>

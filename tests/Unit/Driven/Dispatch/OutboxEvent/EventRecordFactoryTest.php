@@ -13,7 +13,7 @@ class EventRecordFactoryTest extends TestCase
         /** @Given I have an unmapped event */
         $event = new RejectedDispatch();
 
-        /** @Then an exception indicating unsupported event type should be thrown */
+        /** @Then an exception indicating an unsupported event type should be thrown */
         $template = 'Event <%s> is not supported. Unable to create an EventRecord.';
         $this->expectException(LogicException::class);
         $this->expectExceptionMessage(sprintf($template, $event::class));

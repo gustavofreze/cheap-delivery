@@ -8,7 +8,7 @@ LABEL author="Gustavo Freze" \
 
 ARG FLYWAY_VERSION=10.10.0
 
-RUN apk --no-cache add tar curl mysql-client openjdk21-jre \
+RUN apk --no-cache add curl mysql-client openjdk21-jre tar \
     && mkdir -p /opt/flyway \
     && curl -L "https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/${FLYWAY_VERSION}/flyway-commandline-${FLYWAY_VERSION}-linux-x64.tar.gz" | tar -xz --strip-components=1 -C /opt/flyway \
     && rm -f /opt/flyway/jre/bin/java \
