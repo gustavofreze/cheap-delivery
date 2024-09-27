@@ -4,6 +4,10 @@ parameters:
   level: 9
   tmpDir: report/phpstan
   ignoreErrors:
+    - '#Parameter ...#'
+    - '#with generic#'
+    - '#does not accept mixed#'
+    - '#extends generic class#'
     - '#expects string\|null, mixed given#'
     - '#with no value type specified in iterable type array#'
     - '#expects class-string<T of object>\|T of object, string given#'

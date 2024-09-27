@@ -2,7 +2,7 @@
 
 namespace CheapDelivery\Application\Domain\Models;
 
-use CheapDelivery\Application\Domain\Models\Commons\Collection;
+use TinyBlocks\Collection\Collection;
 
 final class Carriers extends Collection
 {

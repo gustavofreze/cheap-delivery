@@ -2,7 +2,7 @@
 
 namespace CheapDelivery\Application\Domain\Events;
 
-use CheapDelivery\Application\Domain\Models\Commons\Collection;
+use TinyBlocks\Collection\Collection;
 
 final class Events extends Collection
 {
