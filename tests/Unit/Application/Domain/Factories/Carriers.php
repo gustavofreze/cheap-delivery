@@ -13,11 +13,10 @@ use CheapDelivery\Application\Domain\Models\Modalities\LinearCost;
 use CheapDelivery\Application\Domain\Models\Modalities\PartialCost;
 use CheapDelivery\Application\Domain\Models\Name;
 use CheapDelivery\Application\Domain\Models\Weight;
-use TinyBlocks\Collection\Collectible;
 
 final class Carriers
 {
-    public static function available(): Collectible|CarriersModel
+    public static function available(): CarriersModel
     {
         return CarriersModel::createFrom(elements: [
             Model::carrierFromDHL(),
@@ -26,12 +25,12 @@ final class Carriers
         ]);
     }
 
-    public static function unavailable(): Collectible|CarriersModel
+    public static function unavailable(): CarriersModel
     {
         return CarriersModel::createFromEmpty();
     }
 
-    public static function noEligible(): Collectible|CarriersModel
+    public static function noEligible(): CarriersModel
     {
         return CarriersModel::createFrom(elements: [
             new Carrier(

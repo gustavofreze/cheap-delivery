@@ -5,6 +5,7 @@
          bootstrap="vendor/autoload.php"
          failOnRisky="true"
          failOnWarning="true"
+         executionOrder="random"
          cacheDirectory=".phpunit.cache"
          beStrictAboutOutputDuringTests="true">
 
@@ -19,9 +20,6 @@
     </source>
 
     <testsuites>
-        <testsuite name="all">
-            <directory>tests</directory>
-        </testsuite>
         <testsuite name="unit">
             <directory>tests/Unit</directory>
         </testsuite>

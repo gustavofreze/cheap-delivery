@@ -6,12 +6,11 @@ use CheapDelivery\Application\Domain\Events\DispatchedWithLowestCost;
 use CheapDelivery\Application\Domain\Events\Events;
 use CheapDelivery\Application\Domain\Exceptions\NoEligibleCarriers;
 use CheapDelivery\Application\Domain\Models\Commons\Utc;
-use TinyBlocks\Collection\Collectible;
 use TinyBlocks\Collection\Internal\Operations\Order\Order;
 
 final class Dispatch
 {
-    private Events|Collectible $events;
+    private Events $events;
 
     public function __construct(public DispatchId $id, public ?Shipment $shipment = null)
     {
@@ -23,7 +22,7 @@ final class Dispatch
         return new Dispatch(id: DispatchId::create());
     }
 
-    public function dispatchWithLowestCost(Weight $weight, Distance $distance, Carriers|Collectible $carriers): Dispatch
+    public function dispatchWithLowestCost(Weight $weight, Distance $distance, Carriers $carriers): Dispatch
     {
         $shipments = Shipments::from(weight: $weight, distance: $distance, carriers: $carriers);
 
@@ -48,7 +47,7 @@ final class Dispatch
         return $this;
     }
 
-    public function occurredEvents(): Events|Collectible
+    public function occurredEvents(): Events
     {
         return Events::createFrom(elements: $this->events);
     }

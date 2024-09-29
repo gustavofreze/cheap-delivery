@@ -5,7 +5,6 @@ namespace CheapDelivery\Driven\Carrier\Repository;
 use CheapDelivery\Application\Domain\Models\Carriers as CarriersCollection;
 use CheapDelivery\Application\Ports\Outbound\Carriers;
 use CheapDelivery\Driven\Shared\Database\RelationalConnection;
-use TinyBlocks\Collection\Collectible;
 
 final readonly class Adapter implements Carriers
 {
@@ -13,7 +12,7 @@ final readonly class Adapter implements Carriers
     {
     }
 
-    public function findAll(): CarriersCollection|Collectible
+    public function findAll(): CarriersCollection
     {
         $result = $this->connection
             ->with()

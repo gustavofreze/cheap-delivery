@@ -6,7 +6,6 @@ use CheapDelivery\Driven\Shared\Database\RelationalConnection;
 use CheapDelivery\Driven\Shared\OutboxEvent\Commons\EventRecord;
 use CheapDelivery\Driven\Shared\OutboxEvent\Commons\EventRecords;
 use DateTimeInterface;
-use TinyBlocks\Collection\Collectible;
 
 final readonly class Adapter implements OutboxEvent
 {
@@ -14,7 +13,7 @@ final readonly class Adapter implements OutboxEvent
     {
     }
 
-    public function push(EventRecords|Collectible $events): void
+    public function push(EventRecords $events): void
     {
         $events->each(actions: fn(EventRecord $record) => $this->connection
             ->with()

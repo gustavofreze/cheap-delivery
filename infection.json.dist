@@ -1,10 +1,7 @@
 {
-    "$schema": "vendor/infection/infection/resources/schema.json",
-    "tmpDir": "report/",
-    "logs": {
-        "text": "report/logs/infection-text.log",
-        "summary": "report/logs/infection-summary.log"
-    },
+    "timeout": 10,
+    "testFramework": "phpunit",
+    "tmpDir": "report/infection/",
     "source": {
         "directories": [
             "src"
@@ -13,7 +10,10 @@
             "src/Application/Domain/Models/Commons/Uuid.php"
         ]
     },
-    "timeout": 10,
+    "logs": {
+        "text": "report/infection/logs/infection-text.log",
+        "summary": "report/infection/logs/infection-summary.log"
+    },
     "mutators": {
         "@default": true,
         "BCMath": false,
@@ -25,5 +25,8 @@
         "MethodCallRemoval": false,
         "NullSafePropertyCall": false
     },
-    "testFramework": "phpunit"
+    "phpUnit": {
+        "configDir": "",
+        "customPath": "./vendor/bin/phpunit"
+    }
 }
