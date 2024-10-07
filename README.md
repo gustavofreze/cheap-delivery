@@ -32,13 +32,13 @@ transportation conditions:
 
 ### Use cases
 
-- [Dispatch with lowest cost](docs/USE_CASES.md#dispatch-with-lowest-cost)
+- [Dispatch with the lowest cost](docs/USE_CASES.md#dispatch-with-the-lowest-cost)
 
 <div id='queries'></div> 
 
 ### Queries
 
-- [Query dispatch with lowest cost](docs/QUERIES.md#query-dispatches-with-lowest-cost)
+- [Query dispatch with the lowest cost](docs/QUERIES.md#query-dispatches-with-lowest-cost)
 
 <div id='installation'></div> 
 
@@ -95,7 +95,7 @@ make test
 Displays coverage reports in the browser:
 
 ```bash
-make show-coverage 
+make show-reports 
 ```
 
 <div id='review'></div> 
@@ -109,6 +109,8 @@ make review
 ```
 
 > You can check other available commands by running `make help`.
+
+<div id='environment_setup'></div> 
 
 ## Environment Setup
 

@@ -1,25 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Application\Domain\Models;
 
 use CheapDelivery\Application\Domain\Exceptions\NonPositiveValue;
 use CheapDelivery\Application\Domain\Exceptions\WeightOutOfRange;
-use CheapDelivery\Application\Domain\Models\Commons\PositiveDecimal;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class WeightTest extends TestCase
 {
-    public function testCreateWeight(): void
+    #[DataProvider('validWeightValuesProvider')]
+    public function testCreateWeightWithValidValues(float $value, float $expected): void
     {
         /** @Given a valid weight value */
-        $expected = 1000.00;
-
         /** @When I create a new Weight instance */
-        $actual = new Weight(value: $expected);
+        $actual = new Weight(value: $value);
 
         /** @Then the instance should be a PositiveDecimal and the value should match the expected */
-        self::assertInstanceOf(PositiveDecimal::class, $actual);
         self::assertEquals($expected, $actual->value);
     }
 
@@ -50,9 +49,18 @@ class WeightTest extends TestCase
         new Weight(value: $value);
     }
 
+    public static function validWeightValuesProvider(): array
+    {
+        return [
+            'Weight below 1000.0'     => ['value' => 999.99, 'expected' => 999.99],
+            'Weight exactly 1000.0'   => ['value' => 1000.0, 'expected' => 1000.0],
+            'Minimum positive weight' => ['value' => 0.01, 'expected' => 0.01]
+        ];
+    }
+
     public static function invalidValueProvider(): iterable
     {
-        yield 'zero value' => [0.0];
-        yield 'negative value' => [-1.0];
+        yield 'zero value' => ['value' => 0.0];
+        yield 'negative value' => ['value' => -1.0];
     }
 }

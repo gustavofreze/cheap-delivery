@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Driven\Dispatch\Repository;
 
 use CheapDelivery\Application\Domain\Models\Dispatch;

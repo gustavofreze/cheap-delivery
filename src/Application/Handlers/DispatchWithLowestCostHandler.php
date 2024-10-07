@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Application\Handlers;
 
 use CheapDelivery\Application\Commands\Command;

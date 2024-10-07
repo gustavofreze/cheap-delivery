@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Driven\Dispatch\OutboxEvent\Revision\Aggregate;
 
 use CheapDelivery\Application\Domain\Models\Dispatch;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Driver\Http\Endpoints\Dispatch\Mocks;
 
 use CheapDelivery\Application\Commands\Command;
@@ -21,11 +23,11 @@ final class DispatchWithLowestCostHandlerMock implements CommandHandler
         $distance = $command->person->distance->value;
 
         match ($distance) {
-            Exceptions::UNKNOWN_ERROR => throw new RuntimeException(message: 'Any error.'),
-            Exceptions::NO_ELIGIBLE_CARRIERS => throw new NoEligibleCarriers(),
+            Exceptions::UNKNOWN_ERROR         => throw new RuntimeException(message: 'Any error.'),
+            Exceptions::NO_ELIGIBLE_CARRIERS  => throw new NoEligibleCarriers(),
             Exceptions::DISTANCE_OUT_OF_RANGE => throw new DistanceOutOfRange(current: $distance, maximum: 20000.00),
             Exceptions::NO_CARRIERS_AVAILABLE => throw new NoCarriersAvailable(),
-            default => null
+            default                           => null
         };
     }
 }

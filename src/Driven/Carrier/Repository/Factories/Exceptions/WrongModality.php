@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Driven\Carrier\Repository\Factories\Exceptions;
 
 use LogicException;

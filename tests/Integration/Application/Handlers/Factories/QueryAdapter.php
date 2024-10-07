@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Test\Integration\Application\Handlers\Factories;
 
 use CheapDelivery\Application\Domain\Events\DispatchedWithLowestCost;
@@ -36,7 +38,7 @@ final class QueryAdapter extends QueryCapabilities
         return new Dispatch(
             id: new DispatchId(value: new Uuid(value: $record['id'])),
             shipment: Shipment::from(
-                cost: new Cost(value: $record['cost']),
+                cost: new Cost(value: (float)$record['cost']),
                 carrierName: new Name(value: $record['carrier_name'])
             )
         );
@@ -44,7 +46,8 @@ final class QueryAdapter extends QueryCapabilities
 
     public function findEventBy(Identity $aggregateId, string $eventType): DispatchedWithLowestCost
     {
-        $record = $this->connection
+        $record = $this
+                      ->connection
                       ->executeQuery(self::FIND_EVENT, [
                           'eventType'   => $eventType,
                           'aggregateId' => $aggregateId->getValue()
@@ -55,7 +58,7 @@ final class QueryAdapter extends QueryCapabilities
         $dispatch = new Dispatch(
             id: new DispatchId(value: new Uuid(value: $snapshot['id'])),
             shipment: Shipment::from(
-                cost: new Cost(value: $snapshot['shipment']['cost']),
+                cost: new Cost(value: (float)$snapshot['shipment']['cost']),
                 carrierName: new Name(value: $snapshot['shipment']['carrierName'])
             )
         );

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Driven\Carrier\Repository\Factories\Modalities;
 
 use CheapDelivery\Application\Domain\Models\Modalities\CostModality;
@@ -16,11 +18,11 @@ final readonly class CostModalityGenericFactory implements CostModalityFactory
         $modality = $this->costModality['modality'];
 
         return match ($modality) {
-            self::FIXED => (new FixedCostFactory(costModality: $this->costModality))->build(),
-            self::LINEAR => (new LinearCostFactory(costModality: $this->costModality))->build(),
-            self::PARTIAL => (new PartialCostFactory(costModality: $this->costModality))->build(),
+            self::FIXED     => (new FixedCostFactory(costModality: $this->costModality))->build(),
+            self::LINEAR    => (new LinearCostFactory(costModality: $this->costModality))->build(),
+            self::PARTIAL   => (new PartialCostFactory(costModality: $this->costModality))->build(),
             self::COMPOSITE => (new CompositeCostFactory(costModality: $this->costModality))->build(),
-            default => throw new UnknownModality(invalid: $modality)
+            default         => throw new UnknownModality(invalid: $modality)
         };
     }
 }

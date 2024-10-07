@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Test\Unit\Driven\Shared\Database\MySql;
 
 use CheapDelivery\Driven\Shared\Database\MySql\MySqlFailure;
