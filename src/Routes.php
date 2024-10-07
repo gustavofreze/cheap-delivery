@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery;
 
-use CheapDelivery\Driver\Http\Endpoints\Dispatch\DispatchWithLowestCost;
 use CheapDelivery\Driver\Http\Endpoints\Dispatch\DispatchExceptionHandler;
+use CheapDelivery\Driver\Http\Endpoints\Dispatch\DispatchWithLowestCost;
 use CheapDelivery\Driver\Http\Middlewares\ErrorHandling;
 use CheapDelivery\Query\Dispatch\Resource;
 use Slim\App;

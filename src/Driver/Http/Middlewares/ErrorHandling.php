@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Driver\Http\Middlewares;
 
 use CheapDelivery\Driver\Http\Endpoints\ExceptionHandler;

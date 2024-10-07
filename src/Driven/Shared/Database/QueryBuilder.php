@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Driven\Shared\Database;
 
 interface QueryBuilder
@@ -8,7 +10,7 @@ interface QueryBuilder
      * Map the results using a callback.
      *
      * @param callable $callback The callback function to apply to each element.
-     * @return mixed[] The mapped results.
+     * @return array The mapped results.
      * @throws DatabaseFailure If an error occurs during the mapping operation.
      */
     public function map(callable $callback): array;
@@ -42,7 +44,7 @@ interface QueryBuilder
     /**
      * Fetch all rows from the result set.
      *
-     * @return mixed[] All rows from the result set.
+     * @return array All rows from the result set.
      * @throws DatabaseFailure If an error occurs during the fetching operation.
      */
     public function fetchAll(): array;

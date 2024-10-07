@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Driven\Carrier\Repository\Factories\Conditions;
 
 use CheapDelivery\Application\Domain\Models\Conditions\CostCondition;
@@ -21,9 +23,9 @@ final readonly class CostConditionGenericFactory implements CostConditionFactory
         $weight = new Weight(value: $this->costCondition['weight']);
 
         return match ($name->value) {
-            self::WEIGHT_SMALLER_THAN => new WeightSmallerThan(threshold: $weight),
+            self::WEIGHT_SMALLER_THAN          => new WeightSmallerThan(threshold: $weight),
             self::WEIGHT_GREATER_THAN_OR_EQUAL => new WeightGreaterThanOrEqual(threshold: $weight),
-            default => throw new UnknownCondition(invalid: $name->value)
+            default                            => throw new UnknownCondition(invalid: $name->value)
         };
     }
 }

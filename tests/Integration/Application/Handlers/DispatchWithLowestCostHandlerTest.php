@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Test\Integration\Application\Handlers;
 
 use CheapDelivery\Application\Commands\DispatchWithLowestCost;
@@ -43,13 +45,13 @@ class DispatchWithLowestCostHandlerTest extends IntegrationTestCapabilities
         /** @Then the dispatch should be persisted */
         $actual = $this->query->findLastDispatch();
 
-        self::assertEquals(96.4, $actual->shipment?->cost->value);
-        self::assertEquals('DHL', $actual->shipment?->carrierName->value);
+        self::assertSame(96.4, $actual->shipment?->cost->value);
+        self::assertSame('DHL', $actual->shipment?->carrierName->value);
 
         /** @And a new event will be inserted into the outbox table */
         $event = $this->query->findEventBy(aggregateId: $actual->id, eventType: 'DispatchedWithLowestCost');
 
+        self::assertSame(1, $event->revision());
         self::assertEquals($actual, $event->dispatch);
-        self::assertEquals(1, $event->revision());
     }
 }

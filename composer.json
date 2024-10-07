@@ -20,9 +20,12 @@
         "php": "^8.2",
         "slim/psr7": "^1.7",
         "slim/slim": "^4.14",
+        "ramsey/uuid": "^4.7",
         "doctrine/dbal": "^3.9",
-        "tiny-blocks/http": "^3.1",
+        "tiny-blocks/math": "^3",
+        "tiny-blocks/http": "^3",
         "tiny-blocks/collection": "^1",
+        "tiny-blocks/value-object": "^3",
         "php-di/slim-bridge": "^3.4",
         "ext-pdo": "*",
         "ext-bcmath": "*"
@@ -47,8 +50,9 @@
         "phpmd": "phpmd ./src text phpmd.xml --suffixes php --exclude --ignore-violations-on-exit",
         "phpstan": "phpstan analyse -c phpstan.neon.dist --quiet --no-progress",
         "fix-style": "phpcbf ./src --extensions=php",
+        "test-no-coverage": "phpunit --no-coverage",
         "unit-test": "phpunit -c phpunit.xml --no-coverage --testsuite unit",
-        "mutation-test": "infection --only-covered --logger-html=report/coverage/mutation-report.html --coverage=report/coverage --min-msi=100 --min-covered-msi=100 --threads=4",
+        "mutation-test": "infection --log-verbosity=all --only-covered --logger-html=report/coverage/mutation-report.html --coverage=report/coverage --min-msi=100 --min-covered-msi=100 --threads=4",
         "integration-test": "phpunit -c phpunit.xml --no-coverage --testsuite integration",
         "review": [
             "@phpcs",
@@ -58,6 +62,9 @@
         "tests": [
             "@test",
             "@mutation-test"
+        ],
+        "tests-file-no-coverage": [
+            "@test-no-coverage"
         ]
     }
 }

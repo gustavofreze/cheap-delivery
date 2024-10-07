@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Query\Dispatch;
 
-use CheapDelivery\Query\Dispatch\Database\Facade;
 use CheapDelivery\Query\Dispatch\Database\DispatchFilters;
+use CheapDelivery\Query\Dispatch\Database\Facade;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;

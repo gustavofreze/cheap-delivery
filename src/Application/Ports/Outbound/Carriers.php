@@ -7,7 +7,7 @@ use CheapDelivery\Application\Domain\Models\Carriers as CarriersCollection;
 interface Carriers
 {
     /**
-     * Retrieves all carriers from the repository.
+     * Retrieves all carriers.
      *
      * @return CarriersCollection The collection of carriers.
      */

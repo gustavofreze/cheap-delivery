@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Driver\Http\Endpoints\Dispatch;
 
 use CheapDelivery\Application\Domain\Exceptions\DistanceOutOfRange;
@@ -23,12 +25,12 @@ final class DispatchExceptionHandler implements ExceptionHandler
         return match (get_class($exception)) {
             EmptyName::class,
             NameTooLong::class,
-            NonPositiveValue::class,
             WeightOutOfRange::class,
-            DistanceOutOfRange::class => HttpResponse::unprocessableEntity(data: $error),
-            NoEligibleCarriers::class => HttpResponse::badRequest(data: $error),
+            NonPositiveValue::class,
+            DistanceOutOfRange::class  => HttpResponse::unprocessableEntity(data: $error),
+            NoEligibleCarriers::class  => HttpResponse::badRequest(data: $error),
             NoCarriersAvailable::class => HttpResponse::notFound(data: $error),
-            default => HttpResponse::internalServerError(data: $error)
+            default                    => HttpResponse::internalServerError(data: $error)
         };
     }
 }

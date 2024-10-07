@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Application\Commands;
 
 use CheapDelivery\Application\Domain\Models\Person;

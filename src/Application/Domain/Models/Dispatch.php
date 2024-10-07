@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Application\Domain\Models;
 
 use CheapDelivery\Application\Domain\Events\DispatchedWithLowestCost;
@@ -7,9 +9,13 @@ use CheapDelivery\Application\Domain\Events\Events;
 use CheapDelivery\Application\Domain\Exceptions\NoEligibleCarriers;
 use CheapDelivery\Application\Domain\Models\Commons\Utc;
 use TinyBlocks\Collection\Internal\Operations\Order\Order;
+use TinyBlocks\Vo\ValueObject;
+use TinyBlocks\Vo\ValueObjectBehavior;
 
-final class Dispatch
+final class Dispatch implements ValueObject
 {
+    use ValueObjectBehavior;
+
     private Events $events;
 
     public function __construct(public DispatchId $id, public ?Shipment $shipment = null)

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Driven\Shared\OutboxEvent;
 
 use CheapDelivery\Driven\Shared\OutboxEvent\Commons\EventRecords;
