@@ -5,9 +5,6 @@
     "source": {
         "directories": [
             "src"
-        ],
-        "excludes": [
-            "src/Application/Domain/Models/Commons/Uuid.php"
         ]
     },
     "logs": {

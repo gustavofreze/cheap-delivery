@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Application\Domain\Models\Modalities;
 
 use CheapDelivery\Application\Domain\Models\Conditions\CostCondition;

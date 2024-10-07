@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Driven\Shared\OutboxEvent;
 
 use CheapDelivery\Driven\Shared\Database\RelationalConnection;
@@ -20,7 +22,7 @@ final readonly class Adapter implements OutboxEvent
             ->query(sql: Queries::INSERT_EVENT)
             ->bind(data: [
                 ':id'            => $record->id->toString(),
-                ':payload'       => $record->payload,
+                ':payload'       => $record->payload->toJson(),
                 ':snapshot'      => $record->snapshot->toJson(),
                 ':revision'      => $record->revision->value,
                 ':eventType'     => $record->type,

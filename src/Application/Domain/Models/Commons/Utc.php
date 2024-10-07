@@ -16,16 +16,12 @@ final readonly class Utc
 
     public static function now(): Utc
     {
-        $timezone = new DateTimeZone(timezone: self::TIMEZONE);
-        $dateTime = new DateTimeImmutable(datetime: 'now', timezone: $timezone);
-        $formattedDate = $dateTime->format(format: self::FORMAT_RFC3339);
+        $timezone = new DateTimeZone(self::TIMEZONE);
+        $dateTime = new DateTimeImmutable('now', $timezone);
+        $formattedDate = $dateTime->format(self::FORMAT_RFC3339);
 
         /** @var DateTimeImmutable $utc */
-        $utc = DateTimeImmutable::createFromFormat(
-            format: self::FORMAT_RFC3339,
-            datetime: $formattedDate,
-            timezone: $timezone
-        );
+        $utc = DateTimeImmutable::createFromFormat(self::FORMAT_RFC3339, $formattedDate, $timezone);
 
         return new Utc(dateTime: $utc);
     }

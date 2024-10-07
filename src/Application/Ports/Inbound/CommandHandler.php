@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Application\Ports\Inbound;
 
 use CheapDelivery\Application\Commands\Command;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery;
 
 use CheapDelivery\Application\Handlers\DispatchWithLowestCostHandler;
@@ -25,7 +27,7 @@ use function DI\get;
 final class Dependencies
 {
     /**
-     * @return mixed[]
+     * @return array
      */
     public static function definitions(): array
     {

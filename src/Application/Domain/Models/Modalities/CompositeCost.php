@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Application\Domain\Models\Modalities;
 
 use CheapDelivery\Application\Domain\Models\Cost;
@@ -27,6 +29,6 @@ final readonly class CompositeCost implements CostModality
 
         $result = $costOne->add(addend: $costTwo);
 
-        return new Cost(value: $result->value);
+        return new Cost(value: $result->toFloat());
     }
 }

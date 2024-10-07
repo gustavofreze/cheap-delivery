@@ -1,12 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Application\Domain\Models;
 
 use CheapDelivery\Application\Domain\Exceptions\EmptyName;
 use CheapDelivery\Application\Domain\Exceptions\NameTooLong;
+use TinyBlocks\Vo\ValueObject;
+use TinyBlocks\Vo\ValueObjectBehavior;
 
-final readonly class Name
+final readonly class Name implements ValueObject
 {
+    use ValueObjectBehavior;
+
     private const MAXIMUM_LENGTH = 255;
 
     public function __construct(public string $value)

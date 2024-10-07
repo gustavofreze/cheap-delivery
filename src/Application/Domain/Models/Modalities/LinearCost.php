@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Application\Domain\Models\Modalities;
 
 use CheapDelivery\Application\Domain\Models\Cost;
@@ -17,6 +19,6 @@ final readonly class LinearCost implements CostModality
         $product = $distance->multiply(multiplier: $weight);
         $cost = $product->multiply(multiplier: $this->variableCost);
 
-        return new Cost(value: $cost->value);
+        return new Cost(value: $cost->toFloat());
     }
 }

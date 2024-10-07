@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Driven\Carrier\Repository\Factories\Modalities;
 
 use CheapDelivery\Driven\Carrier\Repository\Factories\Exceptions\WrongModality;

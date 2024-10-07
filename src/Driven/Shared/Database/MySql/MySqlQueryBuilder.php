@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Driven\Shared\Database\MySql;
 
+use CheapDelivery\Driven\Shared\Database\QueryBuilder;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Statement;
-use CheapDelivery\Driven\Shared\Database\QueryBuilder;
 use Throwable;
 
 final class MySqlQueryBuilder implements QueryBuilder

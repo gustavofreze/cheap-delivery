@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Application\Domain\Models;
 
 use CheapDelivery\Application\Domain\Exceptions\DistanceOutOfRange;
 use CheapDelivery\Application\Domain\Exceptions\NonPositiveValue;
-use CheapDelivery\Application\Domain\Models\Commons\PositiveDecimal;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +20,6 @@ class DistanceTest extends TestCase
         $actual = new Distance(value: $expected);
 
         /** @Then the instance should be a PositiveDecimal and the value should match the expected */
-        self::assertInstanceOf(PositiveDecimal::class, $actual);
         self::assertEquals($expected, $actual->value);
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Driven\Dispatch\OutboxEvent\Mocks;
 
 use CheapDelivery\Application\Domain\Events\Event;

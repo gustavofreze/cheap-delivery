@@ -1,8 +1,8 @@
-* [Dispatch with lowest cost](#dispatch_with_lowest_cost)
+* [Dispatch with the lowest cost](#dispatch_with_lowest_cost)
 
 <div id='dispatch_with_lowest_cost'></div> 
 
-## Dispatch with lowest cost
+## Dispatch with the lowest cost
 
 ###### It is the process that calculates the dispatch with the lowest available cost.
 

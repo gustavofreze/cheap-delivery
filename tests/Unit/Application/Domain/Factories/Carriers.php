@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Application\Domain\Factories;
 
 use CheapDelivery\Application\Domain\Models\Carrier;

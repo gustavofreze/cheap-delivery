@@ -1,9 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Application\Domain\Models;
 
-readonly final class Shipment
+use TinyBlocks\Vo\ValueObject;
+use TinyBlocks\Vo\ValueObjectBehavior;
+
+readonly final class Shipment implements ValueObject
 {
+    use ValueObjectBehavior;
+
     private function __construct(public Cost $cost, public Name $carrierName)
     {
     }

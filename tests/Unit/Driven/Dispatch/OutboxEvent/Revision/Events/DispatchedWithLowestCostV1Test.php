@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Driven\Dispatch\OutboxEvent\Revision\Events;
 
 use CheapDelivery\Application\Domain\Events\DispatchedWithLowestCost;
@@ -46,10 +48,10 @@ class DispatchedWithLowestCostV1Test extends TestCase
                 ]
             ]
         ], JSON_PRESERVE_ZERO_FRACTION);
-        self::assertEquals(1, $actual->revision->value);
-        self::assertEquals('Dispatch', $actual->aggregateType->value);
-        self::assertEquals($expectedPayload, $actual->payload);
-        self::assertEquals($dispatch->id->getValue(), $actual->aggregateId->getValue());
+        self::assertSame(1, $actual->revision->value);
+        self::assertSame('Dispatch', $actual->aggregateType->value);
+        self::assertSame($expectedPayload, $actual->payload->toJson());
+        self::assertSame($dispatch->id->getValue(), $actual->aggregateId->getValue());
         self::assertInstanceOf(EventRecord::class, $actual);
     }
 }
