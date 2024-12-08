@@ -8,10 +8,10 @@ use CheapDelivery\Application\Domain\Models\Modalities\CostModality;
 
 interface CostModalityFactory
 {
-    public const FIXED = 'Fixed';
-    public const LINEAR = 'Linear';
-    public const PARTIAL = 'Partial';
-    public const COMPOSITE = 'Composite';
+    public const string FIXED = 'Fixed';
+    public const string LINEAR = 'Linear';
+    public const string PARTIAL = 'Partial';
+    public const string COMPOSITE = 'Composite';
 
     /**
      * Builds a CostModality instance based on the factory type.

@@ -13,7 +13,7 @@ final class Weight extends PositiveDecimal implements ValueObject
 {
     use ValueObjectBehavior;
 
-    private const MAXIMUM_WEIGHT = 1000.00;
+    private const float MAXIMUM_WEIGHT = 1000.00;
 
     public function __construct(public float $value)
     {

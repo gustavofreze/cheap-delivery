@@ -9,7 +9,7 @@ use CheapDelivery\Application\Domain\Models\Dispatch;
 use CheapDelivery\Driven\Shared\OutboxEvent\Commons\EventRecord;
 use CheapDelivery\Driven\Shared\OutboxEvent\Commons\EventRecords;
 
-final class EventRecordWrapper
+final readonly class EventRecordWrapper
 {
     public function pack(Dispatch $dispatch): EventRecords
     {
@@ -22,7 +22,7 @@ final class EventRecordWrapper
         return $eventRecords;
     }
 
-    public function wrap(Event $event): EventRecord
+    private function wrap(Event $event): EventRecord
     {
         return EventRecordFactory::from(event: $event);
     }

@@ -12,7 +12,7 @@ final readonly class DispatchedWithLowestCost implements Event
 {
     use EventCapabilities;
 
-    private const REVISION = 1;
+    private const int REVISION = 1;
 
     public function __construct(public Identity $id, public Dispatch $dispatch, public Utc $instant)
     {

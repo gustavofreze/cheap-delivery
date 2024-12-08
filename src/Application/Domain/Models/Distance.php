@@ -13,7 +13,7 @@ final class Distance extends PositiveDecimal implements ValueObject
 {
     use ValueObjectBehavior;
 
-    private const MAXIMUM_DISTANCE = 20000.00;
+    private const float MAXIMUM_DISTANCE = 20000.00;
 
     public function __construct(public float $value)
     {

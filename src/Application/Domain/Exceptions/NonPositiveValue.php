@@ -12,6 +12,7 @@ final class NonPositiveValue extends DomainException
     {
         $template = '%s cannot be zero or negative. Invalid value <%s>.';
         $className = $this->getClassNameFrom(class: $class);
+
         parent::__construct(message: sprintf($template, $className, $value));
     }
 
