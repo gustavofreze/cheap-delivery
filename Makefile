@@ -1,40 +1,61 @@
-PWD := $(shell pwd -L)
-PHP_IMAGE := gustavofreze/php:8.2
-APP_RUN := docker run -u root --rm -it --network=host -v ${PWD}:/app -w /app ${PHP_IMAGE}
-APP_TEST_RUN := docker run -u root --rm -it --name cheap-delivery-integration-test --link cheap-delivery-adm --network=cheap-delivery_default -v ${PWD}:/app -w /app ${PHP_IMAGE}
+ifeq ($(OS),Windows_NT)
+    PWD := $(shell cd)
+else
+    PWD := $(shell pwd -L)
+endif
 
-FLYWAY_IMAGE := flyway/flyway:10.19.0
-FLYWAY_RUN := docker run --rm -v ${PWD}/db/mysql/migrations:/flyway/sql --env-file=config/local.env --link cheap-delivery-adm --network=cheap-delivery_default ${FLYWAY_IMAGE}
-MIGRATE_DB := ${FLYWAY_RUN} -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm
-MIGRATE_TEST_DB := ${FLYWAY_RUN} -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm_test
+ARCH := $(shell uname -m)
+PLATFORM :=
+
+ifeq ($(ARCH),arm64)
+    PLATFORM := --platform=linux/amd64
+endif
+
+PHP_IMAGE = gustavofreze/php:8.3
+FLYWAY_IMAGE = flyway/flyway:11.0.1
+
+APP_RUN = docker run ${PLATFORM} -u root --rm -it -v ${PWD}:/app -w /app ${PHP_IMAGE}
+APP_TEST_RUN = docker run ${PLATFORM} -u root --rm -it \
+ 				--name cheap-delivery-test \
+ 				--network=cheap-delivery-test_default \
+				-v ${PWD}:/app \
+				-v ${PWD}/config/database/mysql/migrations:/cheap-delivery-adm-migrations \
+				-v /var/run/docker.sock:/var/run/docker.sock \
+				-w /app \
+				${PHP_IMAGE}
+
+FLYWAY_RUN = docker run ${PLATFORM} --rm -v ${PWD}/config/database/mysql/migrations:/flyway/sql --env-file=config/local.env --network=cheap-delivery_default ${FLYWAY_IMAGE}
+MIGRATE_DB = ${FLYWAY_RUN} -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm -connectRetries=15
 
 .DEFAULT_GOAL := help
+.PHONY: start stop configure configure-test-environment migrate-database clean-database test test-no-coverage review show-reports help
 
-.PHONY: start configure test unit-test integration-test review fix-style show-coverage clean migrate-database clean-database migrate-test-database help
+start: ## Start application containers
+	@docker compose up -d --build
 
-start: ## Start Docker compose services
-	@docker-compose up -d --build
+stop: ## Stop application containers
+	@docker compose down
 
 configure: ## Configure development environment
 	@${APP_RUN} composer update --optimize-autoloader
 
-test: migrate-test-database ## Run all tests
+test: configure-test-environment ## Run all tests with coverage
 	@${APP_TEST_RUN} composer run tests
 
-unit-test: ## Run unit tests
-	@${APP_RUN} composer run unit-test
+test-no-coverage: configure-test-environment ## Run all tests without coverage
+	@${APP_TEST_RUN} composer run tests-no-coverage
 
-integration-test: migrate-test-database ## Run integration tests
-	@${APP_TEST_RUN} composer run integration-test
-
-review: ## Run code review
+review: ## Run static code analysis
 	@${APP_RUN} composer review
 
-fix-style: ## Fix code style
-	@${APP_RUN} composer fix-style
-
-show-reports: ## Open code coverage reports in browser
+show-reports: ## Open static analysis reports (e.g., coverage, lints) in the browser
 	@sensible-browser report/coverage/coverage-html/index.html report/coverage/mutation-report.html
+
+configure-test-environment: ## Configures the test environment
+	@if ! docker network inspect cheap-delivery-test_default > /dev/null 2>&1; then \
+		docker network create cheap-delivery-test_default > /dev/null 2>&1; \
+	fi
+	@docker volume create cheap-delivery-adm-migrations > /dev/null 2>&1
 
 migrate-database: ## Run database migrations
 	@${MIGRATE_DB} migrate
@@ -42,19 +63,23 @@ migrate-database: ## Run database migrations
 clean-database: ## Clean database
 	@${MIGRATE_DB} clean
 
-migrate-test-database: ## Run test database migrations
-	@${MIGRATE_TEST_DB} clean
-	@${MIGRATE_TEST_DB} migrate
-
 help: ## Display this help message
 	@echo "Usage: make [target]"
 	@echo ""
 	@echo "Setup and run"
-	@grep -E '^(configure|start|migrate-database|clean-database):.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^(start|stop|configure|migrate-database|clean-database):.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 	@echo ""
 	@echo "Testing"
-	@grep -E '^(test|unit-test|integration-test|show-reports|migrate-test-database):.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@grep -E '^(test|test-no-coverage):.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 	@echo ""
-	@echo "Code review "
-	@grep -E '^(review|fix-style):.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@echo "Code review"
+	@grep -E '^(review):.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 	@echo ""
+	@echo "Reports"
+	@grep -E '^(show-reports):.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@echo ""
+	@echo "Observability"
+	@grep -E '^(show-logs):.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
+	@echo ""
+	@echo "Help"
+	@grep -E '^(help):.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'

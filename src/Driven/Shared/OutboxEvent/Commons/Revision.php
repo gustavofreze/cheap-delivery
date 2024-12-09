@@ -6,7 +6,7 @@ namespace CheapDelivery\Driven\Shared\OutboxEvent\Commons;
 
 use InvalidArgumentException;
 
-final class Revision
+final readonly class Revision
 {
     public function __construct(public int $value)
     {

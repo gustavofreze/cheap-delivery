@@ -10,7 +10,7 @@ use TinyBlocks\Math\PositiveBigDecimal;
 
 class PositiveDecimal extends PositiveBigDecimal
 {
-    private const SCALE = 2;
+    private const int SCALE = 2;
 
     public function __construct(public float $value)
     {
