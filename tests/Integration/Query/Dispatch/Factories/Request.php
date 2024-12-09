@@ -2,12 +2,12 @@
 
 namespace Test\Integration\Query\Dispatch\Factories;
 
-use CheapDelivery\Environment;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Psr7\Headers;
 use Slim\Psr7\Request as SlimRequest;
 use Slim\Psr7\Stream;
 use Slim\Psr7\Uri;
+use TinyBlocks\EnvironmentVariable\EnvironmentVariable;
 
 final class Request
 {
@@ -15,7 +15,7 @@ final class Request
     {
         $uri = new Uri(
             scheme: 'https',
-            host: Environment::get(variable: 'CHEAP_DELIVERY_HOST')->toString(),
+            host: EnvironmentVariable::from(name: 'CHEAP_DELIVERY_HOST')->toString(),
             port: null,
             path: '/',
             query: http_build_query($parameters)

@@ -28,7 +28,7 @@ FLYWAY_RUN = docker run ${PLATFORM} --rm -v ${PWD}/config/database/mysql/migrati
 MIGRATE_DB = ${FLYWAY_RUN} -locations=filesystem:/flyway/sql -schemas=cheap_delivery_adm -connectRetries=15
 
 .DEFAULT_GOAL := help
-.PHONY: start stop configure create-network create-volume migrate-database clean-database test test-no-coverage review show-reports help
+.PHONY: start stop configure configure-test-environment migrate-database clean-database test test-no-coverage review show-reports help
 
 start: ## Start application containers
 	@docker compose up -d --build
@@ -39,10 +39,10 @@ stop: ## Stop application containers
 configure: ## Configure development environment
 	@${APP_RUN} composer update --optimize-autoloader
 
-test: create-network create-volume ## Run all tests with coverage
+test: configure-test-environment ## Run all tests with coverage
 	@${APP_TEST_RUN} composer run tests
 
-test-no-coverage: create-network create-volume ## Run all tests without coverage
+test-no-coverage: configure-test-environment ## Run all tests without coverage
 	@${APP_TEST_RUN} composer run tests-no-coverage
 
 review: ## Run static code analysis
@@ -51,12 +51,10 @@ review: ## Run static code analysis
 show-reports: ## Open static analysis reports (e.g., coverage, lints) in the browser
 	@sensible-browser report/coverage/coverage-html/index.html report/coverage/mutation-report.html
 
-create-network: ## Creates the Docker network for the project if it doesn't exist
+configure-test-environment: ## Configures the test environment
 	@if ! docker network inspect cheap-delivery-test_default > /dev/null 2>&1; then \
 		docker network create cheap-delivery-test_default > /dev/null 2>&1; \
 	fi
-
-create-volume: ## Create database migrations volume
 	@docker volume create cheap-delivery-adm-migrations > /dev/null 2>&1
 
 migrate-database: ## Run database migrations

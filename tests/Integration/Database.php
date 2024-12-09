@@ -4,45 +4,55 @@ declare(strict_types=1);
 
 namespace Test\Integration;
 
-use CheapDelivery\Environment;
 use TinyBlocks\DockerContainer\GenericDockerContainer;
 use TinyBlocks\DockerContainer\MySQLDockerContainer;
 use TinyBlocks\DockerContainer\Waits\Conditions\MySQL\MySQLReady;
 use TinyBlocks\DockerContainer\Waits\ContainerWaitForDependency;
 use TinyBlocks\DockerContainer\Waits\ContainerWaitForTime;
+use TinyBlocks\EnvironmentVariable\EnvironmentVariable;
 
 final readonly class Database
 {
     private function __construct(
         private string $host,
+        private string $network,
         private string $database,
         private string $username,
         private string $password,
-        private string $migrationFile
+        private string $migrations
     ) {
     }
 
     public static function instance(): Database
     {
-        $host = Environment::get(variable: 'DATABASE_HOST')->toString();
-        $database = Environment::get(variable: 'DATABASE_NAME')->toString();
-        $username = Environment::get(variable: 'DATABASE_USER')->toString();
-        $password = Environment::get(variable: 'DATABASE_PASSWORD')->toString();
-        $migrationFile = '/cheap-delivery-adm-migrations/.migrated';
+        $host = EnvironmentVariable::from(name: 'DATABASE_HOST')->toString();
+        $network = 'cheap-delivery-test_default';
+        $database = EnvironmentVariable::from(name: 'DATABASE_NAME')->toString();
+        $username = EnvironmentVariable::from(name: 'DATABASE_USER')->toString();
+        $password = EnvironmentVariable::from(name: 'DATABASE_PASSWORD')->toString();
+        $migrations = '/cheap-delivery-adm-migrations';
 
         return new Database(
             host: $host,
+            network: $network,
             database: $database,
             username: $username,
             password: $password,
-            migrationFile: $migrationFile
+            migrations: $migrations
         );
     }
 
     public function start(): void
     {
+        $environmentVariable = EnvironmentVariable::fromOrDefault(name: 'RUN_MIGRATIONS', defaultValueIfNotFound: '0');
+        $shouldRunMigrations = $environmentVariable->toBoolean();
+
+        if ($shouldRunMigrations === false) {
+            return;
+        }
+
         $mySQLContainer = MySQLDockerContainer::from(image: 'mysql:8.1', name: $this->host)
-            ->withNetwork(name: 'cheap-delivery-test_default')
+            ->withNetwork(name: $this->network)
             ->withTimezone(timezone: 'America/Sao_Paulo')
             ->withPassword(password: $this->password)
             ->withDatabase(database: $this->database)
@@ -51,16 +61,12 @@ final readonly class Database
             ->withVolumeMapping(pathOnHost: '/var/lib/mysql', pathOnContainer: '/var/lib/mysql')
             ->runIfNotExists();
 
-        if (file_exists($this->migrationFile)) {
-            return;
-        }
-
         $jdbcUrl = $mySQLContainer->getJdbcUrl();
 
         GenericDockerContainer::from(image: 'flyway/flyway:11.0.1')
-            ->withNetwork(name: 'cheap-delivery-test_default')
-            ->copyToContainer(pathOnHost: '/cheap-delivery-adm-migrations', pathOnContainer: '/flyway/sql')
-            ->withVolumeMapping(pathOnHost: '/cheap-delivery-adm-migrations', pathOnContainer: '/flyway/sql')
+            ->withNetwork(name: $this->network)
+            ->copyToContainer(pathOnHost: $this->migrations, pathOnContainer: '/flyway/sql')
+            ->withVolumeMapping(pathOnHost: $this->migrations, pathOnContainer: '/flyway/sql')
             ->withWaitBeforeRun(
                 wait: ContainerWaitForDependency::untilReady(
                     condition: MySQLReady::from(
@@ -81,7 +87,5 @@ final readonly class Database
                 commands: ['-connectRetries=15', 'clean', 'migrate'],
                 waitAfterStarted: ContainerWaitForTime::forSeconds(seconds: 5)
             );
-
-        touch($this->migrationFile);
     }
 }

@@ -26,6 +26,7 @@
         "tiny-blocks/http": "^3",
         "tiny-blocks/collection": "^1",
         "tiny-blocks/value-object": "^3",
+        "tiny-blocks/environment-variable": "^1",
         "php-di/slim-bridge": "^3.4",
         "ext-pdo": "*",
         "ext-bcmath": "*"
@@ -46,12 +47,12 @@
         }
     },
     "scripts": {
-        "test": "phpunit -c phpunit.xml tests",
+        "test": "RUN_MIGRATIONS=1 phpunit --configuration phpunit.xml tests",
         "phpcs": "phpcs --standard=PSR12 --extensions=php ./src",
         "phpmd": "phpmd ./src text phpmd.xml --suffixes php --exclude /src/Routes.php --ignore-violations-on-exit",
         "phpstan": "phpstan analyse -c phpstan.neon.dist --quiet --no-progress",
         "mutation-test": "infection --only-covered --threads=max --logger-html=report/coverage/mutation-report.html --coverage=report/coverage",
-        "test-no-coverage": "phpunit -c phpunit.xml --no-coverage tests",
+        "test-no-coverage": "phpunit --configuration phpunit.xml --no-coverage tests",
         "review": [
             "@phpcs",
             "@phpmd",

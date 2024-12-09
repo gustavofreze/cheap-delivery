@@ -15,7 +15,6 @@
         </include>
         <exclude>
             <file>src/Routes.php</file>
-            <file>src/Environment.php</file>
             <file>src/Dependencies.php</file>
         </exclude>
     </source>
