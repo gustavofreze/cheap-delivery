@@ -7,8 +7,8 @@ use DateTimeZone;
 
 final readonly class Utc
 {
-    private const TIMEZONE = 'UTC';
-    private const FORMAT_RFC3339 = 'Y-m-d\TH:i:s.u\Z';
+    private const string TIMEZONE = 'UTC';
+    private const string FORMAT_RFC3339 = 'Y-m-d\TH:i:s.u\Z';
 
     public function __construct(public DateTimeImmutable $dateTime)
     {

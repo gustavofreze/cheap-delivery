@@ -6,7 +6,7 @@ namespace CheapDelivery\Driven\Shared\OutboxEvent\Commons;
 
 use ReflectionClass;
 
-final class AggregateType
+final readonly class AggregateType
 {
     private function __construct(public string $value)
     {

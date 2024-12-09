@@ -19,6 +19,7 @@ use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
 use PDO;
+use TinyBlocks\EnvironmentVariable\EnvironmentVariable;
 
 use function DI\autowire;
 use function DI\create;
@@ -32,20 +33,15 @@ final class Dependencies
     public static function definitions(): array
     {
         return [
-            Connection::class             => function () {
-                return DriverManager::getConnection(
-                    [
-                        'driver'        => 'pdo_mysql',
-                        'host'          => Environment::get(variable: 'MYSQL_DATABASE_HOST')->toString(),
-                        'user'          => Environment::get(variable: 'MYSQL_DATABASE_USER')->toString(),
-                        'port'          => Environment::get(variable: 'MYSQL_DATABASE_PORT')->toInt(),
-                        'dbname'        => Environment::get(variable: 'MYSQL_DATABASE_NAME')->toString(),
-                        'password'      => Environment::get(variable: 'MYSQL_DATABASE_PASSWORD')->toString(),
-                        'driverOptions' => [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']
-                    ],
-                    new Configuration()
-                );
-            },
+            Connection::class             => static fn(): Connection => DriverManager::getConnection([
+                'driver'        => 'pdo_mysql',
+                'host'          => EnvironmentVariable::from(name: 'DATABASE_HOST')->toString(),
+                'user'          => EnvironmentVariable::from(name: 'DATABASE_USER')->toString(),
+                'port'          => EnvironmentVariable::from(name: 'DATABASE_PORT')->toInteger(),
+                'dbname'        => EnvironmentVariable::from(name: 'DATABASE_NAME')->toString(),
+                'password'      => EnvironmentVariable::from(name: 'DATABASE_PASSWORD')->toString(),
+                'driverOptions' => [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']
+            ], new Configuration()),
             Dispatches::class             => autowire(DispatchesAdapter::class),
             OutboxEvent::class            => autowire(OutboxEventAdapter::class),
             DispatchQuery::class          => autowire(DispatchQuery::class),

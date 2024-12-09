@@ -13,7 +13,7 @@ final readonly class Name implements ValueObject
 {
     use ValueObjectBehavior;
 
-    private const MAXIMUM_LENGTH = 255;
+    private const int MAXIMUM_LENGTH = 255;
 
     public function __construct(public string $value)
     {

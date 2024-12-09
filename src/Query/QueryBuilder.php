@@ -8,7 +8,7 @@ use Doctrine\DBAL\Query\QueryBuilder as DoctrineQueryBuilder;
 
 class QueryBuilder extends DoctrineQueryBuilder
 {
-    private const AND_WHERE = '%s = :%s';
+    private const string AND_WHERE = '%s = :%s';
 
     public function applyFilters(Filters $filters): QueryBuilder
     {
