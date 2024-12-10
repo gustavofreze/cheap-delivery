@@ -8,7 +8,7 @@ use CheapDelivery\Application\Domain\Events\DispatchedWithLowestCost;
 use CheapDelivery\Application\Domain\Events\Events;
 use CheapDelivery\Application\Domain\Exceptions\NoEligibleCarriers;
 use CheapDelivery\Application\Domain\Models\Commons\Utc;
-use TinyBlocks\Collection\Internal\Operations\Order\Order;
+use TinyBlocks\Collection\Order;
 use TinyBlocks\Vo\ValueObject;
 use TinyBlocks\Vo\ValueObjectBehavior;
 
@@ -35,10 +35,10 @@ final class Dispatch implements ValueObject
         $shipment = $shipments
             ->filter()
             ->map(transformations: fn(Shipment $shipment) => $shipment)
-            ->sort(order: Order::ASCENDING_VALUE, predicate: fn(
-                Shipment $first,
-                Shipment $second
-            ) => $first->cost->value <=> $second->cost->value)
+            ->sort(
+                order: Order::ASCENDING_VALUE,
+                predicate: fn(Shipment $first, Shipment $second) => $first->cost->value <=> $second->cost->value
+            )
             ->first();
 
         if (is_null($shipment)) {
