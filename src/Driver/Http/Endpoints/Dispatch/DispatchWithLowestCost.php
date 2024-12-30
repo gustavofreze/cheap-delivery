@@ -9,7 +9,7 @@ use CheapDelivery\Application\Ports\Inbound\CommandHandler;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use TinyBlocks\Http\HttpResponse;
+use TinyBlocks\Http\Response;
 
 final readonly class DispatchWithLowestCost implements RequestHandlerInterface
 {
@@ -25,6 +25,6 @@ final readonly class DispatchWithLowestCost implements RequestHandlerInterface
 
         $this->useCase->handle(command: $command);
 
-        return HttpResponse::noContent();
+        return Response::noContent();
     }
 }

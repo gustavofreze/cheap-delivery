@@ -9,7 +9,7 @@ use CheapDelivery\Driver\Http\Endpoints\Dispatch\Mocks\Exceptions;
 use CheapDelivery\Driver\Http\Middlewares\ErrorHandling;
 use CheapDelivery\Factories\Request;
 use PHPUnit\Framework\TestCase;
-use TinyBlocks\Http\HttpCode;
+use TinyBlocks\Http\Code;
 
 class DispatchExceptionHandlerTest extends TestCase
 {
@@ -48,7 +48,7 @@ class DispatchExceptionHandlerTest extends TestCase
         /** @Then the response should be an error indicating no eligible carriers */
         $expected = ['error' => 'There are no eligible carriers for the dispatch.'];
 
-        self::assertEquals(HttpCode::BAD_REQUEST->value, $actual->getStatusCode());
+        self::assertEquals(Code::BAD_REQUEST->value, $actual->getStatusCode());
         self::assertEquals(json_encode($expected), $actual->getBody()->__toString());
     }
 
@@ -75,7 +75,7 @@ class DispatchExceptionHandlerTest extends TestCase
         /** @Then the response should be an error indicating no carriers available */
         $expected = ['error' => 'There are no carriers available for dispatch.'];
 
-        self::assertEquals(HttpCode::NOT_FOUND->value, $actual->getStatusCode());
+        self::assertEquals(Code::NOT_FOUND->value, $actual->getStatusCode());
         self::assertEquals(json_encode($expected), $actual->getBody()->__toString());
     }
 
@@ -102,7 +102,7 @@ class DispatchExceptionHandlerTest extends TestCase
         /** @Then the response should be an error indicating distance out of range */
         $expected = ['error' => 'Distance is out of range. Current <50000.00>, Maximum <20000.00>.'];
 
-        self::assertEquals(HttpCode::UNPROCESSABLE_ENTITY->value, $actual->getStatusCode());
+        self::assertEquals(Code::UNPROCESSABLE_ENTITY->value, $actual->getStatusCode());
         self::assertEquals(json_encode($expected), $actual->getBody()->__toString());
     }
 
@@ -129,7 +129,7 @@ class DispatchExceptionHandlerTest extends TestCase
         /** @Then the response should be an error indicating weight out of range */
         $expected = ['error' => 'Weight is out of range. Current <2000.00>, Maximum <1000.00>.'];
 
-        self::assertEquals(HttpCode::UNPROCESSABLE_ENTITY->value, $actual->getStatusCode());
+        self::assertEquals(Code::UNPROCESSABLE_ENTITY->value, $actual->getStatusCode());
         self::assertEquals(json_encode($expected), $actual->getBody()->__toString());
     }
 
@@ -156,7 +156,7 @@ class DispatchExceptionHandlerTest extends TestCase
         /** @Then the response should be an error indicating weight cannot be zero or negative */
         $expected = ['error' => 'Weight cannot be zero or negative. Invalid value <0>.'];
 
-        self::assertEquals(HttpCode::UNPROCESSABLE_ENTITY->value, $actual->getStatusCode());
+        self::assertEquals(Code::UNPROCESSABLE_ENTITY->value, $actual->getStatusCode());
         self::assertEquals(json_encode($expected), $actual->getBody()->__toString());
     }
 
@@ -183,7 +183,7 @@ class DispatchExceptionHandlerTest extends TestCase
         /** @Then the response should be an error indicating empty name */
         $expected = ['error' => 'Name cannot be empty.'];
 
-        self::assertEquals(HttpCode::UNPROCESSABLE_ENTITY->value, $actual->getStatusCode());
+        self::assertEquals(Code::UNPROCESSABLE_ENTITY->value, $actual->getStatusCode());
         self::assertEquals(json_encode($expected), $actual->getBody()->__toString());
     }
 
@@ -210,7 +210,7 @@ class DispatchExceptionHandlerTest extends TestCase
         /** @Then the response should be an error indicating name is too long */
         $expected = ['error' => 'Name is too long. Current <256> characters, Maximum <255> characters.'];
 
-        self::assertEquals(HttpCode::UNPROCESSABLE_ENTITY->value, $actual->getStatusCode());
+        self::assertEquals(Code::UNPROCESSABLE_ENTITY->value, $actual->getStatusCode());
         self::assertEquals(json_encode($expected), $actual->getBody()->__toString());
     }
 
@@ -237,7 +237,7 @@ class DispatchExceptionHandlerTest extends TestCase
         /** @Then the response should be an error indicating error */
         $expected = ['error' => 'Any error.'];
 
-        self::assertEquals(HttpCode::INTERNAL_SERVER_ERROR->value, $actual->getStatusCode());
+        self::assertEquals(Code::INTERNAL_SERVER_ERROR->value, $actual->getStatusCode());
         self::assertEquals(json_encode($expected), $actual->getBody()->__toString());
     }
 }

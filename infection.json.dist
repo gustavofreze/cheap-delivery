@@ -22,6 +22,7 @@
         "CastFloat": false,
         "CastArray": false,
         "CastString": false,
+        "PublicVisibility": false,
         "MethodCallRemoval": false,
         "NullSafePropertyCall": false
     },

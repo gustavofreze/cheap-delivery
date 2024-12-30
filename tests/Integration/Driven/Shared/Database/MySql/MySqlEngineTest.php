@@ -13,10 +13,10 @@ use Test\Integration\IntegrationTestCapabilities;
 
 class MySqlEngineTest extends IntegrationTestCapabilities
 {
-    private const INSERT = 'INSERT INTO test_table (name) VALUES (:name);';
-    private const SELECT_ALL = 'SELECT * FROM test_table;';
-    private const DROP_TABLE = 'DROP TEMPORARY TABLE test_table;';
-    private const CREATE_TABLE = '
+    private const string INSERT = 'INSERT INTO test_table (name) VALUES (:name);';
+    private const string SELECT_ALL = 'SELECT * FROM test_table;';
+    private const string DROP_TABLE = 'DROP TEMPORARY TABLE test_table;';
+    private const string CREATE_TABLE = '
             CREATE TEMPORARY TABLE test_table
             (
                 id   INT AUTO_INCREMENT,
