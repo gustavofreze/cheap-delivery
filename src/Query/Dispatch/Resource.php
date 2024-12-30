@@ -10,7 +10,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Throwable;
-use TinyBlocks\Http\HttpResponse;
+use TinyBlocks\Http\Response;
 
 final readonly class Resource implements RequestHandlerInterface
 {
@@ -24,9 +24,9 @@ final readonly class Resource implements RequestHandlerInterface
             $filters = DispatchFilters::from(data: $request->getQueryParams());
             $dispatches = $this->facade->findAll(filters: $filters);
 
-            return HttpResponse::ok(data: $dispatches);
+            return Response::ok(body: $dispatches);
         } catch (Throwable $exception) {
-            return HttpResponse::internalServerError(data: ['error' => $exception->getMessage()]);
+            return Response::internalServerError(body: ['error' => $exception->getMessage()]);
         }
     }
 }

@@ -14,7 +14,7 @@ use CheapDelivery\Application\Domain\Exceptions\WeightOutOfRange;
 use CheapDelivery\Driver\Http\Endpoints\ExceptionHandler;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
-use TinyBlocks\Http\HttpResponse;
+use TinyBlocks\Http\Response;
 
 final class DispatchExceptionHandler implements ExceptionHandler
 {
@@ -27,10 +27,10 @@ final class DispatchExceptionHandler implements ExceptionHandler
             NameTooLong::class,
             WeightOutOfRange::class,
             NonPositiveValue::class,
-            DistanceOutOfRange::class  => HttpResponse::unprocessableEntity(data: $error),
-            NoEligibleCarriers::class  => HttpResponse::badRequest(data: $error),
-            NoCarriersAvailable::class => HttpResponse::notFound(data: $error),
-            default                    => HttpResponse::internalServerError(data: $error)
+            DistanceOutOfRange::class  => Response::unprocessableEntity(body: $error),
+            NoEligibleCarriers::class  => Response::badRequest(body: $error),
+            NoCarriersAvailable::class => Response::notFound(body: $error),
+            default                    => Response::internalServerError(body: $error)
         };
     }
 }

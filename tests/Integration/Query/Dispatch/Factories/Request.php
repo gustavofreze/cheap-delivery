@@ -9,7 +9,7 @@ use Slim\Psr7\Stream;
 use Slim\Psr7\Uri;
 use TinyBlocks\EnvironmentVariable\EnvironmentVariable;
 
-final class Request
+final readonly class Request
 {
     public static function getFrom(array $parameters): ServerRequestInterface
     {

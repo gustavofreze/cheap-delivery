@@ -23,7 +23,7 @@
         "ramsey/uuid": "^4.7",
         "doctrine/dbal": "^3.9",
         "tiny-blocks/math": "^3",
-        "tiny-blocks/http": "^3",
+        "tiny-blocks/http": "^4",
         "tiny-blocks/collection": "^1",
         "tiny-blocks/value-object": "^3",
         "tiny-blocks/environment-variable": "^1",
@@ -52,7 +52,7 @@
         "phpmd": "phpmd ./src text phpmd.xml --suffixes php --exclude /src/Routes.php --ignore-violations-on-exit",
         "phpstan": "phpstan analyse -c phpstan.neon.dist --quiet --no-progress",
         "mutation-test": "infection --only-covered --threads=max --logger-html=report/coverage/mutation-report.html --coverage=report/coverage",
-        "test-no-coverage": "phpunit --configuration phpunit.xml --no-coverage tests",
+        "test-no-coverage": "RUN_MIGRATIONS=1 phpunit --configuration phpunit.xml --no-coverage tests",
         "review": [
             "@phpcs",
             "@phpmd",
