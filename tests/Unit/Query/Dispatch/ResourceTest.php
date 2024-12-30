@@ -10,7 +10,7 @@ use CheapDelivery\Query\QueryBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
-use TinyBlocks\Http\HttpCode;
+use TinyBlocks\Http\Code;
 
 class ResourceTest extends TestCase
 {
@@ -45,7 +45,7 @@ class ResourceTest extends TestCase
         /** @Then a response indicating an error should be returned */
         $expected = ['error' => 'Query failed. Reason: <Database error.>.'];
 
-        self::assertEquals(HttpCode::INTERNAL_SERVER_ERROR->value, $actual->getStatusCode());
+        self::assertEquals(Code::INTERNAL_SERVER_ERROR->value, $actual->getStatusCode());
         self::assertEquals(json_encode($expected), $actual->getBody()->__toString());
     }
 }

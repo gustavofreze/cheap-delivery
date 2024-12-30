@@ -6,7 +6,7 @@ use Test\Integration\QueryCapabilities;
 
 final class QueryAdapter extends QueryCapabilities
 {
-    private const INSERT_DISPATCH = '
+    private const string INSERT_DISPATCH = '
             INSERT INTO dispatch (id, cost, carrier_name, created_at)
             VALUES (UUID_TO_BIN(:id), :cost, :carrierName, :createdAt);';
 

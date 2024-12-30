@@ -7,7 +7,7 @@ namespace CheapDelivery\Driver\Http\Endpoints\Dispatch;
 use CheapDelivery\Driver\Http\Endpoints\Dispatch\Mocks\DispatchWithLowestCostHandlerMock;
 use CheapDelivery\Factories\Request;
 use PHPUnit\Framework\TestCase;
-use TinyBlocks\Http\HttpCode;
+use TinyBlocks\Http\Code;
 
 class DispatchWithLowestCostTest extends TestCase
 {
@@ -42,7 +42,7 @@ class DispatchWithLowestCostTest extends TestCase
         $actual = $this->endpoint->handle(request: $request);
 
         /** @Then the request should be successful */
-        self::assertEquals(HttpCode::NO_CONTENT->value, $actual->getStatusCode());
+        self::assertEquals(Code::NO_CONTENT->value, $actual->getStatusCode());
 
         /** @And a command should be registered */
         $person = $this->useCase->lastCommand->person;
