@@ -20,6 +20,6 @@ class PartialCostFactoryTest extends TestCase
         $this->expectExceptionMessage(sprintf($template, $costModality['modality'], CostModalityFactory::PARTIAL));
 
         /** @When I try to build this modality */
-        (new PartialCostFactory(costModality: $costModality))->build();
+        new PartialCostFactory(costModality: $costModality)->build();
     }
 }

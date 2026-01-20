@@ -18,12 +18,12 @@ use Test\Integration\QueryCapabilities;
 
 final class QueryAdapter extends QueryCapabilities
 {
-    private const FIND_LAST_DISPATCH = '
+    private const string FIND_LAST_DISPATCH = '
             SELECT BIN_TO_UUID(id) AS id, cost, carrier_name
             FROM dispatch
             ORDER BY created_at DESC';
 
-    private const FIND_EVENT = '
+    private const string FIND_EVENT = '
                   SELECT snapshot, revision, occurred_on
                   FROM outbox_event
                   WHERE aggregate_id = :aggregateId

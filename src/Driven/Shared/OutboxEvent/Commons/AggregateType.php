@@ -14,6 +14,6 @@ final readonly class AggregateType
 
     public static function from(string $class): AggregateType
     {
-        return new AggregateType(value: (new ReflectionClass(objectOrClass: $class))->getShortName());
+        return new AggregateType(value: new ReflectionClass(objectOrClass: $class)->getShortName());
     }
 }

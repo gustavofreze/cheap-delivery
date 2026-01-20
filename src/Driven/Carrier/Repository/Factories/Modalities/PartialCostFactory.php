@@ -23,8 +23,8 @@ final readonly class PartialCostFactory implements CostModalityFactory
     public function build(): CostModality
     {
         return new PartialCost(
-            modality: (new CostModalityGenericFactory(costModality: $this->costModality['costModality']))->build(),
-            condition: (new CostConditionGenericFactory(costCondition: $this->costModality['costCondition']))->build()
+            modality: new CostModalityGenericFactory(costModality: $this->costModality['costModality'])->build(),
+            condition: new CostConditionGenericFactory(costCondition: $this->costModality['costCondition'])->build()
         );
     }
 }

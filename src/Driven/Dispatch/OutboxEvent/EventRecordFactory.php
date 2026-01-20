@@ -15,7 +15,7 @@ final readonly class EventRecordFactory
     public static function from(Event $event): EventRecord
     {
         if ($event::class === DispatchedWithLowestCost::class) {
-            return (new DispatchedWithLowestCostV1(event: $event))->build();
+            return new DispatchedWithLowestCostV1(event: $event)->build();
         }
 
         $template = 'Event <%s> is not supported. Unable to create an EventRecord.';

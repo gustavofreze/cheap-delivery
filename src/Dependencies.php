@@ -18,7 +18,7 @@ use CheapDelivery\Query\Dispatch\Database\Facade as DispatchQuery;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
-use PDO;
+use Pdo\Mysql;
 use TinyBlocks\EnvironmentVariable\EnvironmentVariable;
 
 use function DI\autowire;
@@ -40,7 +40,7 @@ final class Dependencies
                 'port'          => EnvironmentVariable::from(name: 'DATABASE_PORT')->toInteger(),
                 'dbname'        => EnvironmentVariable::from(name: 'DATABASE_NAME')->toString(),
                 'password'      => EnvironmentVariable::from(name: 'DATABASE_PASSWORD')->toString(),
-                'driverOptions' => [PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8']
+                'driverOptions' => [Mysql::ATTR_INIT_COMMAND => 'SET NAMES utf8']
             ], new Configuration()),
             Dispatches::class             => autowire(DispatchesAdapter::class),
             OutboxEvent::class            => autowire(OutboxEventAdapter::class),

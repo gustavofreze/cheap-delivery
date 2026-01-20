@@ -22,8 +22,8 @@ final readonly class CompositeCostFactory implements CostModalityFactory
     public function build(): CostModality
     {
         return new CompositeCost(
-            modalityOne: (new CostModalityGenericFactory(costModality: $this->costModality['modalityOne']))->build(),
-            modalityTwo: (new CostModalityGenericFactory(costModality: $this->costModality['modalityTwo']))->build()
+            modalityOne: new CostModalityGenericFactory(costModality: $this->costModality['modalityOne'])->build(),
+            modalityTwo: new CostModalityGenericFactory(costModality: $this->costModality['modalityTwo'])->build()
         );
     }
 }

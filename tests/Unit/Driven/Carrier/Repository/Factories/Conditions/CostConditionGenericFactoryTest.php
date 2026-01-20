@@ -19,6 +19,6 @@ class CostConditionGenericFactoryTest extends TestCase
         $this->expectExceptionMessage('Unknown <UNKNOWN> condition.');
 
         /** @When I try to build this condition */
-        (new CostConditionGenericFactory(costCondition: $costCondition))->build();
+        new CostConditionGenericFactory(costCondition: $costCondition)->build();
     }
 }
