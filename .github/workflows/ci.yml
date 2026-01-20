@@ -102,4 +102,4 @@ jobs:
             -v ${PWD}/config/database/mysql/migrations:/cheap-delivery-adm-migrations \
             -v /var/run/docker.sock:/var/run/docker.sock \
             -w /app \
-            gustavofreze/php:${{ env.PHP_VERSION }} bash -c "composer tests"
+            gustavofreze/php:${{ env.PHP_VERSION }}-alpine bash -c "composer tests"
