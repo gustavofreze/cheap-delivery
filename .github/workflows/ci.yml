@@ -86,5 +86,20 @@ jobs:
           name: vendor-artifact
           path: .
 
+      - name: Clean up Docker
+        run: docker system prune -f
+
+      - name: Create Docker network
+        run: docker network create cheap-delivery-test_default
+
+      - name: Create Docker volume for migrations
+        run: docker volume create cheap-delivery-adm-migrations
+
       - name: Run tests
-        run: composer tests
+        run: |
+          docker run -u root --name cheap-delivery-test --network=cheap-delivery-test_default \
+            -v ${PWD}:/app \
+            -v ${PWD}/config/database/mysql/migrations:/cheap-delivery-adm-migrations \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            -w /app \
+            gustavofreze/php:${{ env.PHP_VERSION }} bash -c "composer tests"
