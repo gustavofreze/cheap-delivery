@@ -6,6 +6,8 @@ parameters:
   ignoreErrors:
     - '#Parameter ...#'
     - '#with generic#'
+    - '#Named argument#'
+    - '#never returns null#'
     - '#does not accept mixed#'
     - '#extends generic class#'
     - '#expects string\|null, mixed given#'

@@ -19,6 +19,6 @@ class CostModalityGenericFactoryTest extends TestCase
         $this->expectExceptionMessage('Unknown <UNKNOWN> modality.');
 
         /** @When I try to build this modality */
-        (new CostModalityGenericFactory(costModality: $costModality))->build();
+        new CostModalityGenericFactory(costModality: $costModality)->build();
     }
 }

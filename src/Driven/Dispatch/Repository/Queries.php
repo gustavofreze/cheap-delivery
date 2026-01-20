@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CheapDelivery\Driven\Dispatch\Repository;
 
-final class Queries
+final readonly class Queries
 {
     public const string INSERT_DISPATCH = '
            INSERT INTO dispatch (id, cost, carrier_name)

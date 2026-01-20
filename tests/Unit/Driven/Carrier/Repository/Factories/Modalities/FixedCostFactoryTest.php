@@ -20,6 +20,6 @@ class FixedCostFactoryTest extends TestCase
         $this->expectExceptionMessage(sprintf($template, $costModality['modality'], CostModalityFactory::FIXED));
 
         /** @When I try to build this modality */
-        (new FixedCostFactory(costModality: $costModality))->build();
+        new FixedCostFactory(costModality: $costModality)->build();
     }
 }

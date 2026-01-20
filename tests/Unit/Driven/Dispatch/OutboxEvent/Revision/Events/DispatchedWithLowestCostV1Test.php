@@ -34,7 +34,7 @@ class DispatchedWithLowestCostV1Test extends TestCase
         $event = new DispatchedWithLowestCost(id: $dispatch->id, dispatch: $dispatch, instant: $instant);
 
         /** @When I build the event record from this event in version 01 */
-        $actual = (new DispatchedWithLowestCostV1(event: $event))->build();
+        $actual = new DispatchedWithLowestCostV1(event: $event)->build();
 
         /** @Then the data should be equal to the expected */
         $expectedPayload = json_encode([

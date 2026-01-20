@@ -20,6 +20,6 @@ class LinearCostFactoryTest extends TestCase
         $this->expectExceptionMessage(sprintf($template, $costModality['modality'], CostModalityFactory::LINEAR));
 
         /** @When I try to build this modality */
-        (new LinearCostFactory(costModality: $costModality))->build();
+        new LinearCostFactory(costModality: $costModality)->build();
     }
 }

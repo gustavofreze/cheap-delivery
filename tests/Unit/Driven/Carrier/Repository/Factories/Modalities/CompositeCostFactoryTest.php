@@ -20,6 +20,6 @@ class CompositeCostFactoryTest extends TestCase
         $this->expectExceptionMessage(sprintf($template, $costModality['modality'], CostModalityFactory::COMPOSITE));
 
         /** @When I try to build this modality */
-        (new CompositeCostFactory(costModality: $costModality))->build();
+        new CompositeCostFactory(costModality: $costModality)->build();
     }
 }

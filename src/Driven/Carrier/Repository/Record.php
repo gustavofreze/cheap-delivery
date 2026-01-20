@@ -25,7 +25,7 @@ final readonly class Record
 
         return new Carrier(
             name: new Name(value: $this->value['name']),
-            costModality: (new CostModalityGenericFactory(costModality: $costModality))->build()
+            costModality: new CostModalityGenericFactory(costModality: $costModality)->build()
         );
     }
 }
