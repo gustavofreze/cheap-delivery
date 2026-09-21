@@ -1,0 +1,426 @@
+openapi: 3.1.0
+info:
+  title: Cheap Delivery API
+  version: 1.0.0
+  description: >-
+    Calculates the lowest shipping cost for a prize from the distance to the winner and the weight of the prize, records
+    the resulting dispatch against the carrier that charges the least, and publishes the fact for consumers outside this
+    domain. A carrier prices a shipment through the cost modality it declares, which may be fixed, linear, restricted to
+    a weight band, or a composition of those.
+servers:
+  - url: /
+    description: Relative to the host the service is published on.
+tags:
+  - name: Dispatches
+  - name: Health
+paths:
+  /dispatches:
+    post:
+      operationId: dispatchWithLowestCost
+      tags:
+        - Dispatches
+      summary: Dispatch with the lowest cost
+      description: Calculates the lowest available shipping cost for the prize and records the dispatch.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DispatchRequest'
+      responses:
+        '201':
+          description: Indicates that the dispatch was recorded and its identifier was assigned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DispatchCreated'
+        '404':
+          description: Indicates that no carrier is registered, so nothing can be dispatched.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: NO_CARRIERS_AVAILABLE
+                message: There are no carriers available for dispatch.
+        '409':
+          description: Indicates that no registered carrier prices a shipment of this weight.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: NO_ELIGIBLE_CARRIERS
+                message: There are no eligible carriers for the dispatch.
+        '422':
+          description: >-
+            Indicates that one or more of the provided values are invalid, or that a registered carrier cannot be read.
+            The last three codes report a malformed carrier and no request payload produces them, because a value the
+            payload gets wrong is caught before the domain and answered as INVALID_REQUEST.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                invalidRequest:
+                  value:
+                    code: INVALID_REQUEST
+                    message: '`.person` must be present'
+                weightOutOfRange:
+                  value:
+                    code: WEIGHT_OUT_OF_RANGE
+                    message: Weight is out of range. Current <2000.16>, Maximum <1000.00>.
+                distanceOutOfRange:
+                  value:
+                    code: DISTANCE_OUT_OF_RANGE
+                    message: Distance is out of range. Current <20000.01>, Maximum <20000.00>.
+                carrierModalityNotSupported:
+                  value:
+                    code: CARRIER_MODALITY_NOT_SUPPORTED
+                    message: A registered carrier declares a cost modality this service does not support.
+                nonPositiveValue:
+                  value:
+                    code: NON_POSITIVE_VALUE
+                    message: Cost cannot be zero or negative. Invalid value <0>.
+                invalidName:
+                  value:
+                    code: INVALID_NAME
+                    message: Name cannot be empty.
+        '500':
+          description: Indicates that an unexpected error occurred on the server while processing the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: INTERNAL_ERROR
+                message: An unexpected error occurred.
+    get:
+      operationId: findDispatches
+      tags:
+        - Dispatches
+      summary: Find dispatches
+      description: Lists the dispatches recorded by the service, most recent first.
+      parameters:
+        - name: sort
+          in: query
+          required: false
+          description: Deterministic ordering of the page.
+          schema:
+            type: string
+            default: '-created_at,-id'
+            example: '-created_at,-id'
+        - name: filter
+          in: query
+          required: false
+          description: Filter over the dispatch fields.
+          schema:
+            type: string
+            example: carrier_name==DHL
+        - name: 'page[size]'
+          in: query
+          required: false
+          description: Items per page.
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+            example: 20
+        - name: 'page[cursor]'
+          in: query
+          required: false
+          description: Opaque forward-only cursor carried by links.next of the previous response.
+          schema:
+            type: string
+            example: 'WyIyMDI2LTA5LTIxVDEwOjAwOjAwLjAwMDAwMCswMDowMCIsIjAxOTNiM2ExLTAwMDAtNzAwMC04MDAwLTAwMDAwMDAwMDAwMSJd'
+      responses:
+        '200':
+          description: Indicates that the dispatches page was recovered.
+          headers:
+            Link:
+              description: RFC 8288 navigation carrying the same targets as the links object of the body.
+              schema:
+                type: string
+              example: '</dispatches?page[size]=1>; rel="self", </dispatches?page[cursor]=WyIyMDI2LTA5LTIxVDEwOjAwOjAwLjAwMDAwMCswMDowMCIsIjAxOTNiM2ExLTAwMDAtNzAwMC04MDAwLTAwMDAwMDAwMDAwMSJd&page[size]=1>; rel="next"'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DispatchPage'
+        '422':
+          description: Indicates that a query parameter failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              examples:
+                sortFieldNotAllowed:
+                  value:
+                    code: INVALID_REQUEST
+                    message: Sort field <carrier_name> is not allowed.
+                filterFieldNotAllowed:
+                  value:
+                    code: INVALID_REQUEST
+                    message: Filter field <cost> is not allowed.
+                pageSizeOutOfRange:
+                  value:
+                    code: INVALID_REQUEST
+                    message: Page size <500> must be less than or equal to 100.
+                cursorIsInvalid:
+                  value:
+                    code: INVALID_REQUEST
+                    message: Cursor token <broken> is invalid and could not be decoded.
+        '500':
+          description: Indicates that an unexpected error occurred on the server while processing the request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: INTERNAL_ERROR
+                message: An unexpected error occurred.
+  /health/liveness:
+    get:
+      operationId: livenessCheck
+      tags:
+        - Health
+      summary: Liveness check
+      description: Reports that the process is running and able to answer requests.
+      responses:
+        '200':
+          description: Indicates that the process is alive.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Liveness'
+  /health/readiness:
+    get:
+      operationId: readinessCheck
+      tags:
+        - Health
+      summary: Readiness check
+      description: Reports that every critical dependency of the service is reachable.
+      responses:
+        '200':
+          description: Indicates that the service is ready to handle requests.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Readiness'
+              example:
+                checks:
+                  - status: UP
+                    critical: true
+                    component: database
+                    duration_in_milliseconds: 4.59
+                status: HEALTHY
+        '503':
+          description: >-
+            Indicates that a critical dependency is down, so the service cannot handle requests. The failing entry
+            carries a detail describing the failure, and the aggregate status reports UNAVAILABLE.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Readiness'
+              example:
+                checks:
+                  - detail: 'An exception occurred in the driver: SQLSTATE[HY000] [2002] Connection refused'
+                    status: DOWN
+                    critical: true
+                    component: database
+                    duration_in_milliseconds: 2001.37
+                status: UNAVAILABLE
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: Error code in screaming snake case.
+          example: NO_CARRIERS_AVAILABLE
+        message:
+          type: string
+          description: Human readable description of the failure.
+          example: There are no carriers available for dispatch.
+    Person:
+      type: object
+      required:
+        - name
+        - distance
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          description: Name of the recipient.
+          example: Gustavo
+        distance:
+          type: number
+          format: double
+          minimum: 0.01
+          maximum: 20000
+          description: Distance to the recipient in kilometres.
+          example: 800.0
+    Product:
+      type: object
+      required:
+        - name
+        - weight
+      properties:
+        name:
+          type: string
+          maxLength: 255
+          description: Name of the prize being shipped.
+          example: MacBook Pro
+        weight:
+          type: number
+          format: double
+          minimum: 0.01
+          maximum: 1000
+          description: Weight of the prize in kilograms.
+          example: 2.16
+    DispatchRequest:
+      type: object
+      required:
+        - person
+        - product
+      properties:
+        person:
+          $ref: '#/components/schemas/Person'
+        product:
+          $ref: '#/components/schemas/Product'
+    DispatchCreated:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier assigned to the dispatch.
+          example: 0193b3a1-0000-7000-8000-000000000001
+    Dispatch:
+      type: object
+      required:
+        - id
+        - cost
+        - created_at
+        - carrier_name
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the dispatch.
+          example: 0193b3a1-0000-7000-8000-000000000001
+        cost:
+          type: number
+          format: double
+          description: What the carrier charged for the shipment.
+          example: 96.4
+        created_at:
+          type: string
+          description: Moment when the dispatch was recorded, in ISO 8601 format.
+          example: '2026-09-21T10:00:00.000000+00:00'
+        carrier_name:
+          type: string
+          description: Name of the carrier the shipment was handed to.
+          example: DHL
+    PageMeta:
+      type: object
+      required:
+        - per_page
+        - has_next
+      properties:
+        per_page:
+          type: integer
+          description: Number of items the page carries at most.
+          example: 20
+        has_next:
+          type: boolean
+          description: Whether a following page exists.
+          example: false
+    PageLinks:
+      type: object
+      required:
+        - self
+      properties:
+        self:
+          type: string
+          description: Link to the current page.
+          example: '/dispatches?page[size]=20'
+        next:
+          type: string
+          description: Link to the following page, absent when no following page exists.
+          example: '/dispatches?page[cursor]=WyIyMDI2LTA5LTIxVDEwOjAwOjAwLjAwMDAwMCswMDowMCIsIjAxOTNiM2ExLTAwMDAtNzAwMC04MDAwLTAwMDAwMDAwMDAwMSJd&page[size]=1'
+    DispatchPage:
+      type: object
+      required:
+        - data
+        - meta
+        - links
+      properties:
+        data:
+          type: array
+          description: The dispatches the page carries.
+          items:
+            $ref: '#/components/schemas/Dispatch'
+        meta:
+          $ref: '#/components/schemas/PageMeta'
+        links:
+          $ref: '#/components/schemas/PageLinks'
+    Liveness:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          description: Aggregate liveness status.
+          example: UP
+    HealthCheck:
+      type: object
+      required:
+        - status
+        - critical
+        - component
+        - duration_in_milliseconds
+      properties:
+        status:
+          type: string
+          description: Status of the checked component.
+          example: UP
+        critical:
+          type: boolean
+          description: Whether the service cannot serve traffic without this component.
+          example: true
+        component:
+          type: string
+          description: Name of the checked component.
+          example: database
+        duration_in_milliseconds:
+          type: number
+          format: double
+          description: How long the check took.
+          example: 4.59
+        detail:
+          type: string
+          description: Description of the failure, present only when the check is down.
+          example: 'An exception occurred in the driver: SQLSTATE[HY000] [2002] Connection refused'
+    Readiness:
+      type: object
+      required:
+        - checks
+        - status
+      properties:
+        checks:
+          type: array
+          description: One entry per checked component.
+          items:
+            $ref: '#/components/schemas/HealthCheck'
+        status:
+          type: string
+          description: Aggregate readiness status.
+          example: HEALTHY
