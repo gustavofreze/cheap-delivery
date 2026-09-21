@@ -6,7 +6,8 @@ namespace CheapDelivery\Driven\Dispatch\Repository;
 
 final readonly class Queries
 {
-    public const string INSERT_DISPATCH = '
-           INSERT INTO dispatch (id, cost, carrier_name)
-           VALUES (UUID_TO_BIN(:id), :cost, :carrierName);';
+    public const string INSERT = '
+        INSERT INTO dispatch (id, cost, carrier_name)
+        VALUES (UUID_TO_BIN(:id), :cost, :carrierName)
+    ';
 }

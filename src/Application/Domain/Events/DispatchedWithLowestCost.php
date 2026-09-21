@@ -4,22 +4,19 @@ declare(strict_types=1);
 
 namespace CheapDelivery\Application\Domain\Events;
 
-use CheapDelivery\Application\Domain\Models\Commons\Identity;
-use CheapDelivery\Application\Domain\Models\Commons\Utc;
-use CheapDelivery\Application\Domain\Models\Dispatch;
+use CheapDelivery\Application\Domain\Events\Commons\DomainEventBehavior;
+use CheapDelivery\Application\Domain\Models\Dispatch\Shipment;
 
-final readonly class DispatchedWithLowestCost implements Event
+final readonly class DispatchedWithLowestCost implements DispatchEvent
 {
-    use EventCapabilities;
+    use DomainEventBehavior;
 
-    private const int REVISION = 1;
-
-    public function __construct(public Identity $id, public Dispatch $dispatch, public Utc $instant)
+    public function __construct(public Shipment $shipment)
     {
     }
 
-    public function revision(): int
+    public function eventType(): string
     {
-        return self::REVISION;
+        return 'DispatchedWithLowestCost';
     }
 }

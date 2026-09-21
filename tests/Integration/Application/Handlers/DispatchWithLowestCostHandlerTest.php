@@ -5,53 +5,75 @@ declare(strict_types=1);
 namespace Test\Integration\Application\Handlers;
 
 use CheapDelivery\Application\Commands\DispatchWithLowestCost;
-use CheapDelivery\Application\Domain\Models\Distance;
-use CheapDelivery\Application\Domain\Models\Name;
-use CheapDelivery\Application\Domain\Models\Person;
-use CheapDelivery\Application\Domain\Models\Product;
-use CheapDelivery\Application\Domain\Models\Weight;
-use CheapDelivery\Application\Handlers\DispatchWithLowestCostHandler;
-use Test\Integration\Application\Handlers\Factories\QueryAdapter;
-use Test\Integration\IntegrationTestCapabilities;
+use CheapDelivery\Application\Domain\Models\Commons\Distance;
+use CheapDelivery\Application\Domain\Models\Commons\Name;
+use CheapDelivery\Application\Domain\Models\Commons\Weight;
+use CheapDelivery\Application\Domain\Models\Dispatch\DispatchId;
+use CheapDelivery\Application\Domain\Models\Dispatch\Person;
+use CheapDelivery\Application\Domain\Models\Dispatch\Product;
+use CheapDelivery\Application\Ports\Inbound\DispatchingWithLowestCost;
+use PHPUnit\Framework\Attributes\DataProvider;
+use Test\Integration\IntegrationTestCase;
 
-class DispatchWithLowestCostHandlerTest extends IntegrationTestCapabilities
+final class DispatchWithLowestCostHandlerTest extends IntegrationTestCase
 {
-    private DispatchWithLowestCostHandler $handler;
-
-    private QueryAdapter $query;
-
-    protected function setUp(): void
+    public static function shipmentProvider(): array
     {
-        $this->query = new QueryAdapter(self::$container);
-        $this->handler = self::$container->get(DispatchWithLowestCostHandler::class);
+        return [
+            'Light prize over a long distance goes to DHL'    => [
+                'weight'              => 2.16,
+                'distance'            => 800.00,
+                'expectedCost'        => 96.4,
+                'expectedCarrierName' => 'DHL'
+            ],
+            'Heavy prize over a long distance goes to Loggi'  => [
+                'weight'              => 7.50,
+                'distance'            => 800.00,
+                'expectedCost'        => 70.0,
+                'expectedCarrierName' => 'Loggi'
+            ]
+        ];
     }
 
-    protected function tearDown(): void
-    {
-        $this->query->rollBack();
-    }
-
-    public function testDispatchWithLowestCost(): void
-    {
-        /** @Given that I have a command to dispatch with the lowest cost */
+    #[DataProvider('shipmentProvider')]
+    public function testRecordsTheDispatchAndItsFact(
+        float $weight,
+        float $distance,
+        float $expectedCost,
+        string $expectedCarrierName
+    ): void {
+        /** @Given a dispatch command for the seeded carriers */
+        $id = DispatchId::generate();
         $command = new DispatchWithLowestCost(
-            person: new Person(name: new Name(value: 'Gustavo'), distance: new Distance(value: 800.0)),
-            product: new Product(name: new Name(value: 'MacBook Pro'), weight: new Weight(value: 2.16))
+            id: $id,
+            person: Person::from(
+                name: Name::from(value: 'Gustavo'),
+                distance: Distance::from(value: $distance)
+            ),
+            product: Product::from(
+                name: Name::from(value: 'MacBook Pro'),
+                weight: Weight::from(value: $weight)
+            )
         );
 
-        /** @When I request that this command be executed */
-        $this->handler->handle(command: $command);
+        /** @When the command is handled */
+        $this->get(DispatchingWithLowestCost::class)->handle(command: $command);
 
-        /** @Then the dispatch should be persisted */
-        $actual = $this->query->findLastDispatch();
+        /** @Then the dispatch is recorded against the cheapest carrier */
+        self::assertSame(1, $this->fixtures()->dispatchCountOf(carrierName: $expectedCarrierName));
 
-        self::assertSame(96.4, $actual->shipment?->cost->value);
-        self::assertSame('DHL', $actual->shipment?->carrierName->value);
+        /** @And the fact is in the outbox with the cost the carrier charged */
+        $identifier = $id->identityValue();
 
-        /** @And a new event will be inserted into the outbox table */
-        $event = $this->query->findEventBy(aggregateId: $actual->id, eventType: 'DispatchedWithLowestCost');
+        self::assertSame(['DispatchedWithLowestCost'], $this->fixtures()->outboxEventTypesOf(dispatchId: $identifier));
 
-        self::assertSame(1, $event->revision());
-        self::assertEquals($actual, $event->dispatch);
+        $payload = $this->fixtures()->outboxPayloadOf(
+            eventType: 'DispatchedWithLowestCost',
+            dispatchId: $identifier
+        );
+
+        self::assertSame(['cost', 'carrier_name'], array_keys($payload));
+        self::assertSame($expectedCost, (float)$payload['cost']);
+        self::assertSame($expectedCarrierName, $payload['carrier_name']);
     }
 }
