@@ -1,11 +1,11 @@
 {
     "logs": {
-        "text": "report/infection/logs/infection-text.log",
-        "summary": "report/infection/logs/infection-summary.log"
+        "text": "reports/infection/logs/infection-text.log",
+        "summary": "reports/infection/logs/infection-summary.log"
     },
-    "tmpDir": "report/infection/",
+    "tmpDir": "reports/infection/",
     "minMsi": 100,
-    "timeout": 30,
+    "timeout": 90,
     "source": {
         "directories": [
             "src"
@@ -16,15 +16,7 @@
         "customPath": "./vendor/bin/phpunit"
     },
     "mutators": {
-        "@default": true,
-        "BCMath": false,
-        "CastInt": false,
-        "CastFloat": false,
-        "CastArray": false,
-        "CastString": false,
-        "PublicVisibility": false,
-        "MethodCallRemoval": false,
-        "NullSafePropertyCall": false
+        "@default": true
     },
     "minCoveredMsi": 100,
     "testFramework": "phpunit"
