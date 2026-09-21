@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CheapDelivery\Driven\Carrier\Repository\Factories\Modalities;
 
-use CheapDelivery\Application\Domain\Models\Modalities\CostModality;
+use CheapDelivery\Application\Domain\Models\Carrier\Modalities\CostModality;
 
 interface CostModalityFactory
 {

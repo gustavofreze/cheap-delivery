@@ -2,55 +2,147 @@
 
 declare(strict_types=1);
 
-namespace CheapDelivery\Driver\Http\Endpoints\Dispatch;
+namespace Test\Unit\Driver\Http\Endpoints\Dispatch;
 
-use CheapDelivery\Driver\Http\Endpoints\Dispatch\Mocks\DispatchWithLowestCostHandlerMock;
-use CheapDelivery\Factories\Request;
+use CheapDelivery\Application\Domain\Exceptions\NoCarriersAvailable;
+use CheapDelivery\Driver\Http\Endpoints\Dispatch\DispatchWithLowestCost;
+use CheapDelivery\Driver\Http\InvalidRequest;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Test\Unit\RequestFactory;
 use TinyBlocks\Http\Code;
 
-class DispatchWithLowestCostTest extends TestCase
+final class DispatchWithLowestCostTest extends TestCase
 {
-    private DispatchWithLowestCost $endpoint;
-
-    private DispatchWithLowestCostHandlerMock $useCase;
-
-    protected function setUp(): void
+    public static function invalidPayloadProvider(): array
     {
-        $this->useCase = new DispatchWithLowestCostHandlerMock();
-        $this->endpoint = new DispatchWithLowestCost(useCase: $this->useCase);
-    }
-
-    public function testDispatchWithLowestCost(): void
-    {
-        /** @Given that I have the data to calculate the dispatch with the lowest cost */
-        $payload = [
-            'person'  => [
-                'name'     => 'Gustavo',
-                'distance' => 100.0
+        return [
+            'Missing person'     => [
+                'payload' => ['product' => ['name' => 'MacBook Pro', 'weight' => 2.16]]
             ],
-            'product' => [
-                'name'   => 'Notebook',
-                'weight' => 1.0
+            'Missing product'    => [
+                'payload' => ['person' => ['name' => 'Gustavo', 'distance' => 800.0]]
+            ],
+            'Empty holder name'  => [
+                'payload' => [
+                    'person'  => ['name' => '', 'distance' => 800.0],
+                    'product' => ['name' => 'MacBook Pro', 'weight' => 2.16]
+                ]
+            ],
+            'Negative distance'  => [
+                'payload' => [
+                    'person'  => ['name' => 'Gustavo', 'distance' => -1.0],
+                    'product' => ['name' => 'MacBook Pro', 'weight' => 2.16]
+                ]
+            ],
+            'Holder name too long' => [
+                'payload' => [
+                    'person'  => ['name' => str_repeat('a', 256), 'distance' => 800.0],
+                    'product' => ['name' => 'MacBook Pro', 'weight' => 2.16]
+                ]
             ]
         ];
+    }
 
-        /** @And that I use this data in the request */
-        $request = Request::postFrom(payload: $payload);
+    public static function boundaryNameProvider(): array
+    {
+        return [
+            'Shortest accepted name' => ['name' => 'a'],
+            'Longest accepted name'  => ['name' => str_repeat('a', 255)]
+        ];
+    }
 
-        /** @When I execute the request */
-        $actual = $this->endpoint->handle(request: $request);
+    #[DataProvider('boundaryNameProvider')]
+    public function testAcceptsANameAtTheBoundary(string $name): void
+    {
+        /** @Given a dispatch request whose holder name sits at a length boundary */
+        $spy = new DispatchingWithLowestCostSpy();
+        $endpoint = new DispatchWithLowestCost(dispatching: $spy);
 
-        /** @Then the request should be successful */
-        self::assertEquals(Code::NO_CONTENT->value, $actual->getStatusCode());
+        $request = RequestFactory::postFrom(payload: [
+            'person'  => ['name' => $name, 'distance' => 800.0],
+            'product' => ['name' => 'MacBook Pro', 'weight' => 2.16]
+        ]);
 
-        /** @And a command should be registered */
-        $person = $this->useCase->lastCommand->person;
-        $product = $this->useCase->lastCommand->product;
+        /** @When the request is handled */
+        $actual = $endpoint->handle($request);
 
-        self::assertEquals($payload['person']['name'], $person->name->value);
-        self::assertEquals($payload['person']['distance'], $person->distance->value);
-        self::assertEquals($payload['product']['name'], $product->name->value);
-        self::assertEquals($payload['product']['weight'], $product->weight->value);
+        /** @Then the request is accepted */
+        self::assertSame(Code::CREATED->value, $actual->getStatusCode());
+        self::assertSame($name, $spy->received->person->name->value);
+    }
+
+    public function testAnswersWithTheDispatchIdentifier(): void
+    {
+        /** @Given a valid dispatch request */
+        $spy = new DispatchingWithLowestCostSpy();
+        $endpoint = new DispatchWithLowestCost(dispatching: $spy);
+
+        $request = RequestFactory::postFrom(payload: [
+            'person'  => ['name' => 'Gustavo', 'distance' => 800.0],
+            'product' => ['name' => 'MacBook Pro', 'weight' => 2.16]
+        ]);
+
+        /** @When the request is handled */
+        $actual = $endpoint->handle($request);
+
+        /** @Then the dispatch is created and its identifier answered */
+        self::assertSame(Code::CREATED->value, $actual->getStatusCode());
+        self::assertSame(
+            ['id' => $spy->received->id->identityValue()],
+            (array)json_decode($actual->getBody()->__toString(), true)
+        );
+    }
+
+    public function testHandsTheCommandToTheApplication(): void
+    {
+        /** @Given a valid dispatch request */
+        $spy = new DispatchingWithLowestCostSpy();
+        $endpoint = new DispatchWithLowestCost(dispatching: $spy);
+
+        $request = RequestFactory::postFrom(payload: [
+            'person'  => ['name' => 'Gustavo', 'distance' => 800.0],
+            'product' => ['name' => 'MacBook Pro', 'weight' => 2.16]
+        ]);
+
+        /** @When the request is handled */
+        $endpoint->handle($request);
+
+        /** @Then the command carries what the payload declared */
+        self::assertSame('Gustavo', $spy->received->person->name->value);
+        self::assertSame(800.00, $spy->received->person->distance->toFloat());
+        self::assertSame('MacBook Pro', $spy->received->product->name->value);
+        self::assertSame(2.16, $spy->received->product->weight->toFloat());
+    }
+
+    #[DataProvider('invalidPayloadProvider')]
+    public function testRefusesAnInvalidPayload(array $payload): void
+    {
+        /** @Given an invalid dispatch request */
+        $endpoint = new DispatchWithLowestCost(dispatching: new DispatchingWithLowestCostSpy());
+
+        /** @Then the request is refused */
+        $this->expectException(InvalidRequest::class);
+
+        /** @When the request is handled */
+        $endpoint->handle(RequestFactory::postFrom(payload: $payload));
+    }
+
+    public function testPropagatesTheApplicationFailure(): void
+    {
+        /** @Given an application that refuses the dispatch */
+        $spy = new DispatchingWithLowestCostSpy(failure: new NoCarriersAvailable());
+        $endpoint = new DispatchWithLowestCost(dispatching: $spy);
+
+        $request = RequestFactory::postFrom(payload: [
+            'person'  => ['name' => 'Gustavo', 'distance' => 800.0],
+            'product' => ['name' => 'MacBook Pro', 'weight' => 2.16]
+        ]);
+
+        /** @Then the failure reaches the error boundary */
+        $this->expectException(NoCarriersAvailable::class);
+
+        /** @When the request is handled */
+        $endpoint->handle($request);
     }
 }

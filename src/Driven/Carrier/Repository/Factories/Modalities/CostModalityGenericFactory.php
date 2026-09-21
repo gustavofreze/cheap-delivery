@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CheapDelivery\Driven\Carrier\Repository\Factories\Modalities;
 
-use CheapDelivery\Application\Domain\Models\Modalities\CostModality;
+use CheapDelivery\Application\Domain\Models\Carrier\Modalities\CostModality;
 use CheapDelivery\Driven\Carrier\Repository\Factories\Exceptions\UnknownModality;
 
 final readonly class CostModalityGenericFactory implements CostModalityFactory
@@ -15,7 +15,7 @@ final readonly class CostModalityGenericFactory implements CostModalityFactory
 
     public function build(): CostModality
     {
-        $modality = $this->costModality['modality'];
+        $modality = (string)($this->costModality['modality'] ?? '');
 
         return match ($modality) {
             self::FIXED     => new FixedCostFactory(costModality: $this->costModality)->build(),

@@ -1,15 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CheapDelivery\Application\Ports\Outbound;
 
-use CheapDelivery\Application\Domain\Models\Carriers as CarriersCollection;
+use CheapDelivery\Application\Domain\Models\Carrier\Carriers as RegisteredCarriers;
 
+/**
+ * Carriers the service can hand a shipment to.
+ */
 interface Carriers
 {
     /**
-     * Retrieves all carriers.
+     * Returns every carrier with the modality it prices shipments by.
      *
-     * @return CarriersCollection The collection of carriers.
+     * @return RegisteredCarriers The carriers currently registered.
      */
-    public function findAll(): CarriersCollection;
+    public function findAll(): RegisteredCarriers;
 }
