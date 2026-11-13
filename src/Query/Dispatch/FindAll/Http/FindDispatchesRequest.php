@@ -22,6 +22,8 @@ final readonly class FindDispatchesRequest
     {
         $schema = Schema::create()
             ->sortable(fields: ['cost', 'created_at', 'id'])
+            ->cursorKey(field: 'created_at', valueKind: ValueKind::DATETIME)
+            ->cursorKey(field: 'id', valueKind: ValueKind::UUID)
             ->filterable(
                 field: 'carrier_name',
                 operators: [Operator::EQUAL, Operator::IN, Operator::STARTS_WITH],
