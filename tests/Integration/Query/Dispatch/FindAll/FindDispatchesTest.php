@@ -8,9 +8,12 @@ use CheapDelivery\Query\Dispatch\FindAll\Http\FindDispatches;
 use Test\Integration\DispatchRequests;
 use Test\Integration\IntegrationTestCase;
 use TinyBlocks\Http\Code;
+use TinyBlocks\HttpQuery\Exceptions\CursorIsInvalid;
 
 final class FindDispatchesTest extends IntegrationTestCase
 {
+    private const string FORGED_ID_CURSOR = 'WyIyMDI2LTA4LTExVDEwOjAwOjAwLjAwMDAwMCswMDowMCIsIm5vdC1hLXV1aWQiXQ';
+    private const string FORGED_INSTANT_CURSOR = 'WyJub3ciLCIwMTk4YmZjMC0yMjIyLTcwMDAtODAwMC0wMDAwMDAwMDAwMDEiXQ';
     private const string FIRST_ID = '0193b3a1-0000-7000-8000-000000000001';
     private const string SECOND_ID = '0193b3a1-0000-7000-8000-000000000002';
     private const string THIRD_ID = '0193b3a1-0000-7000-8000-000000000003';
@@ -115,5 +118,31 @@ final class FindDispatchesTest extends IntegrationTestCase
 
         /** @Then the cheapest dispatch comes first */
         self::assertSame([4.94, 12.3, 96.4], array_column($body['data'], 'cost'));
+    }
+
+    public function testRefusesACursorForgingTheIdentifier(): void
+    {
+        /** @Given a request carrying a cursor whose identifier is not a UUID */
+        $path = sprintf('/dispatches?page%%5Bcursor%%5D=%s', FindDispatchesTest::FORGED_ID_CURSOR);
+        $request = DispatchRequests::get(path: $path);
+
+        /** @Then the cursor is rejected before reaching the store */
+        $this->expectException(CursorIsInvalid::class);
+
+        /** @When the listing is read */
+        $this->get(FindDispatches::class)->handle($request);
+    }
+
+    public function testRefusesACursorForgingTheCreationInstant(): void
+    {
+        /** @Given a request carrying a cursor whose creation instant is not an ISO 8601 date-time */
+        $path = sprintf('/dispatches?page%%5Bcursor%%5D=%s', FindDispatchesTest::FORGED_INSTANT_CURSOR);
+        $request = DispatchRequests::get(path: $path);
+
+        /** @Then the cursor is rejected before reaching the store */
+        $this->expectException(CursorIsInvalid::class);
+
+        /** @When the listing is read */
+        $this->get(FindDispatches::class)->handle($request);
     }
 }
