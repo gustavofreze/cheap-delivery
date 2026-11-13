@@ -48,7 +48,7 @@ services:
       start_period: 30s
 
   cheap-delivery-migrate:
-    image: flyway/flyway:13.7
+    image: flyway/flyway:13.12
     cpus: 0.5
     hostname: cheap-delivery-migrate
     mem_limit: 256m
