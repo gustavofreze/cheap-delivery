@@ -48,7 +48,6 @@
         <env name="APP_NAME" value="cheap-delivery"/>
         <env name="SOURCE" value="https://cheap-delivery.test"/>
 
-        <env name="DATABASE_HOST" value="cheap-delivery-adm-test"/>
         <env name="DATABASE_PORT" value="3306"/>
         <env name="DATABASE_NAME" value="cheap_delivery_adm_test"/>
         <env name="DATABASE_USER" value="root"/>
